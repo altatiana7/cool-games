@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rewrite: Simple Present vs Present Continuous</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap">
+<style>
+:root{--nav:#0c2340;--bg:#fdf8ee;--card:#fff;--ink:#0c2340;--mute:#5b6b83;--line:#cdd6e3;--sp:#2563eb;--spbg:#eaf0ff;--pc:#d6338a;--pcbg:#fdecf4;--form:#0a86c4;--formbg:#e4f4fb;--go:#16883f;--gohi:#0f6b30;--scene1:#cfe8ff;--scene2:#ffe9c2;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--nav:#07142a;--bg:#101a2c;--card:#18253d;--ink:#eef3fb;--mute:#9fb0c9;--line:#314363;--spbg:#1b2f5e;--pcbg:#4a1a38;--formbg:#12384b;--scene1:#244a78;--scene2:#5a4524}}
+:root[data-theme="dark"]{--nav:#07142a;--bg:#101a2c;--card:#18253d;--ink:#eef3fb;--mute:#9fb0c9;--line:#314363;--spbg:#1b2f5e;--pcbg:#4a1a38;--formbg:#12384b;--scene1:#244a78;--scene2:#5a4524}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:800 16px/1.3 Nunito,system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:var(--nav);color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;flex-wrap:wrap}
+header h1{margin:0;font-size:1.5rem;font-weight:900}
+header .tip{font-size:.85rem;font-weight:600;color:#bcd0ee;flex:1;min-width:180px}
+.nav{display:flex;align-items:center;gap:8px}
+.nav button{width:38px;height:38px;border-radius:8px;border:2px solid #34507d;background:#12305a;color:#fff;font:900 1.1rem Nunito,sans-serif;cursor:pointer}
+.nav button:disabled{opacity:.35;cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:11px;height:11px;border-radius:50%;background:#51668a;display:block;cursor:pointer}
+.dots i.on{background:#ffcc4d;transform:scale(1.25)}
+.dots i.seen{background:#9db3d6}
+main{max-width:1000px;margin:0 auto;padding:14px 14px 40px;display:grid;grid-template-columns:1.1fr 1fr;gap:14px}
+.scene{border-radius:16px;min-height:300px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--scene1),var(--scene2));font-size:7.5rem;letter-spacing:.08em;text-shadow:0 6px 12px rgba(0,0,0,.18);user-select:none}
+.panel{display:flex;flex-direction:column;gap:6px}
+.lab{font-size:.72rem;letter-spacing:.14em;color:var(--mute);margin:2px 2px 0}
+.opts{display:grid;gap:10px}
+.two{grid-template-columns:1fr 1fr}.three{grid-template-columns:repeat(3,1fr)}
+.opt{background:var(--card);border:3px solid var(--line);border-radius:14px;padding:18px 8px;font:900 1.05rem Nunito,sans-serif;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;min-height:64px}
+.opt:focus-visible,.go:focus-visible,.nav button:focus-visible,.listen:focus-visible{outline:3px solid #ffcc4d;outline-offset:2px}
+.tense .opt{min-height:96px}
+.pill{width:22px;height:12px;border-radius:6px;display:inline-block;background:var(--pc)}
+.pill.c{width:16px;height:16px;border-radius:50%;background:var(--sp)}
+.opt[data-t="sp"].on{border-color:var(--sp);background:var(--spbg);color:var(--sp);box-shadow:0 4px 0 var(--sp)}
+.opt[data-t="pc"].on{border-color:var(--pc);background:var(--pcbg);color:var(--pc);box-shadow:0 4px 0 var(--pc)}
+.opt[data-f].on{border-color:var(--form);background:var(--formbg);color:var(--form);box-shadow:0 4px 0 var(--form)}
+.go{margin-top:6px;background:var(--go);color:#fff;border:0;border-radius:14px;padding:18px;font:900 1.6rem Nunito,sans-serif;cursor:pointer;box-shadow:0 5px 0 var(--gohi)}
+.go:active{transform:translateY(3px);box-shadow:0 2px 0 var(--gohi)}
+.sent{grid-column:1/-1;background:var(--card);border:3px solid var(--line);border-radius:16px;padding:16px 18px;text-align:center}
+.sent .big{font-size:clamp(1.7rem,6vw,2.7rem);font-weight:900;margin:4px 0;line-height:1.2}
+.big .verb{color:var(--mute)}
+.res{border-color:var(--sp)}
+.res.pc{border-color:var(--pc)}
+.res .big{color:var(--sp)}.res.pc .big{color:var(--pc)}
+.tag{font-size:.78rem;color:var(--mute);letter-spacing:.06em}
+.listen{margin-top:6px;background:transparent;border:2px solid var(--line);color:var(--ink);border-radius:10px;padding:6px 14px;font:800 .9rem Nunito,sans-serif;cursor:pointer}
+.mode{min-height:44px;padding:10px;font-size:.95rem;border-style:dashed}
+.mode.on{border-style:solid;border-color:#e0a100;background:#fff4d1;color:#7a5600;box-shadow:0 3px 0 #e0a100}
+.target{background:var(--nav);color:#fff;border-radius:12px;padding:12px 14px;font-size:1.05rem;text-align:center}
+.target.warn{background:#b3261e}
+[hidden]{display:none!important}
+@media (max-width:720px){main{grid-template-columns:1fr}.scene{min-height:190px;font-size:5rem}.tense .opt{min-height:72px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Rewrite</h1>
+  <span class="tip">Set the switches, say the sentence, then Switch.</span>
+  <div class="nav"><button id="prev" aria-label="Previous">&#8249;</button><div class="dots" id="dots"></div><button id="next" aria-label="Next">&#8250;</button></div>
+</header>
+<main>
+  <div class="scene" id="scene" aria-hidden="true"></div>
+  <div class="panel">
+    <button class="opt mode" id="mode">&#127919; Challenge mode: off</button>
+    <div class="target" id="target" hidden></div>
+    <div class="lab">TENSE</div>
+    <div class="opts two tense">
+      <button class="opt on" data-t="sp"><span class="pill c"></span>Simple Present</button>
+      <button class="opt" data-t="pc"><span class="pill"></span>Present Continuous</button>
+    </div>
+    <div class="lab">FORM</div>
+    <div class="opts three">
+      <button class="opt on" data-f="pos">&#10004;&#65039; Positive</button>
+      <button class="opt" data-f="neg">&#10060; Negative</button>
+      <button class="opt" data-f="q">&#10067; Question</button>
+    </div>
+    <button class="go" id="go">Switch</button>
+  </div>
+  <div class="sent"><div class="tag">BASE SENTENCE</div><div class="big" id="base"></div></div>
+  <div class="sent res" id="res" hidden>
+    <div class="tag" id="tag"></div>
+    <div class="big" id="out"></div>
+    <button class="listen" id="say">&#128266; Listen</button>
+  </div>
+</main>
+<script>
+const P={he:"3",she:"3",it:"3",I:"I",you:"pl",we:"pl",they:"pl"};
+const ITEMS=[
+{s:"She",v:"fix",s3:"fixes",ing:"fixing",r:"her bike",e:"🚲🔧"},
+{s:"He",v:"play",s3:"plays",ing:"playing",r:"football in the park",e:"⚽🌳"},
+{s:"They",v:"watch",s3:"watches",ing:"watching",r:"a film",e:"🎬🍿"},
+{s:"I",v:"cook",s3:"cooks",ing:"cooking",r:"dinner",e:"🍳🥘"},
+{s:"We",v:"study",s3:"studies",ing:"studying",r:"English",e:"📚✏️"},
+{s:"The dog",v:"eat",s3:"eats",ing:"eating",r:"its food",e:"🐶🦴",p:"3"},
+{s:"Anna",v:"drink",s3:"drinks",ing:"drinking",r:"coffee",e:"☕🥐",p:"3"},
+{s:"My parents",v:"drive",s3:"drives",ing:"driving",r:"to work",e:"🚗🏢",p:"pl"},
+{s:"You",v:"read",s3:"reads",ing:"reading",r:"a book",e:"📖🛋️"},
+{s:"The kids",v:"paint",s3:"paints",ing:"painting",r:"a picture",e:"🎨🖌️",p:"pl"}
+];
+function build(it,t,f){
+  const p=it.p||P[it.s.toLowerCase()]||P[it.s],S=it.s,low=(p&&P[it.s.toLowerCase()])&&it.s!=="I"?S.toLowerCase():S;
+  const cap=x=>x[0].toUpperCase()+x.slice(1),end=" "+it.r;
+  let r;
+  if(t==="sp"){
+    const dn=p==="3"?"doesn't":"don't",D=p==="3"?"Does":"Do";
+    r=f==="pos"?`${S} ${p==="3"?it.s3:it.v}${end}.`:f==="neg"?`${S} ${dn} ${it.v}${end}.`:`${D} ${low} ${it.v}${end}?`;
+  }else{
+    const be=p==="I"?"am":p==="3"?"is":"are",ng=p==="I"?"'m not":p==="3"?"isn't":"aren't";
+    r=f==="pos"?`${S} ${be} ${it.ing}${end}.`:f==="neg"?`${S} ${ng} ${it.ing}${end}.`:`${cap(be)} ${low} ${it.ing}${end}?`;
+  }
+  return r;
+}
+let k=0,seen=new Set([0]),T="sp",F="pos";
+const $=id=>document.getElementById(id);
+function renderDots(){
+  $("dots").innerHTML=ITEMS.map((_,i)=>`<i class="${i===k?"on":seen.has(i)?"seen":""}" data-i="${i}"></i>`).join("");
+}
+let C=false,tg=null;
+const TN={sp:"Simple Present",pc:"Present Continuous"},FN={pos:"Positive",neg:"Negative",q:"Question"};
+function showTarget(warn){
+  const el=$("target");el.hidden=!C;el.classList.toggle("warn",!!warn);
+  if(C&&tg)el.textContent=(warn?"Set the switches first: ":"\u{1F3AF} Say it in: ")+TN[tg.t]+" \u00b7 "+FN[tg.f];
+}
+function roll(){tg={t:Math.random()<.5?"sp":"pc",f:["pos","neg","q"][Math.floor(Math.random()*3)]};showTarget()}
+$("mode").onclick=()=>{
+  C=!C;$("mode").classList.toggle("on",C);
+  $("mode").innerHTML="&#127919; Challenge mode: "+(C?"on":"off");
+  if(C)roll();else showTarget();
+  hideRes();
+};
+function load(){
+  const it=ITEMS[k];seen.add(k);
+  if(C)roll();
+  $("scene").textContent=it.e;
+  $("base").innerHTML=`${it.s} <span class="verb">(${it.v})</span> ${it.r}.`;
+  $("res").hidden=true;
+  $("prev").disabled=k===0;$("next").disabled=k===ITEMS.length-1;
+  renderDots();
+}
+function hideRes(){$("res").hidden=true}
+document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{T=b.dataset.t;document.querySelectorAll("[data-t]").forEach(x=>x.classList.toggle("on",x===b));hideRes()});
+document.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{F=b.dataset.f;document.querySelectorAll("[data-f]").forEach(x=>x.classList.toggle("on",x===b));hideRes()});
+$("go").onclick=()=>{
+  if(C&&tg&&(T!==tg.t||F!==tg.f)){showTarget(true);hideRes();return}
+  showTarget(false);
+  const out=build(ITEMS[k],T,F);
+  $("out").textContent=out;
+  $("res").className="sent res"+(T==="pc"?" pc":"");
+  $("tag").textContent=(T==="sp"?"SIMPLE PRESENT":"PRESENT CONTINUOUS")+" · "+{pos:"POSITIVE",neg:"NEGATIVE",q:"QUESTION"}[F];
+  $("res").hidden=false;
+};
+$("say").onclick=()=>{
+  try{const u=new SpeechSynthesisUtterance($("out").textContent);u.lang="en-US";speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}
+};
+$("prev").onclick=()=>{if(k>0){k--;load()}};
+$("next").onclick=()=>{if(k<ITEMS.length-1){k++;load()}};
+$("dots").onclick=e=>{const i=e.target.dataset&&e.target.dataset.i;if(i!==undefined){k=+i;load()}};
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft")$("prev").click();
+  else if(e.key==="ArrowRight")$("next").click();
+  else if(e.key==="Enter"&&document.activeElement.tagName!=="BUTTON")$("go").click();
+});
+load();
+</script>
+</body>
+</html>
