@@ -309,7 +309,9 @@ document.addEventListener("click",e=>{
   if("print" in d)return window.print();
   if("showq" in d){S.showQ=!S.showQ;return render()}
 });
-function start(data){if(data&&data.marks)S=Object.assign(S,data);render()}
+function start(data){if(data&&data.marks)S=Object.assign(S,data);
+  try{const u=new URLSearchParams(location.search),lv=u.get('lv');if(lv!==null&&ED[0].q[+lv]){S.ed=0;S.lv=+lv;newRound();S.view='wall'}}catch(e){}
+  render()}
 const hot=window.claude&&window.claude.hot;
 if(hot&&hot.snapshot)hot.snapshot(()=>S);
 if(hot&&hot.ready)hot.ready(start);else start((hot&&hot.data)||{});
