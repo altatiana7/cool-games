@@ -153,7 +153,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.05}
 
 <script>
 const ED=[
- {"t": "Unit 1 Revision", "s": "For Gabi · Gateway to the World B1", "lv": ["Words", "Grammar", "Speaking"], "lvd": ["Family, ages, noun suffixes", "Present simple and continuous", "Full answers and opinions"], "q": [["What do we call your mother's or father's brother?", "What is the stage of life between childhood and adulthood called?", "What do we call a child who has no brothers or sisters?", "Who is your nephew: your brother's son or your uncle's son?", "What is the noun from the verb argue?", "What do we call a person who is over sixty-five?", "What is the noun from the adjective independent?", "Who is your stepfather?", "What is the noun from the verb improve?", "What do we call a family with only one parent at home?"], ["What are you doing right now?", "What do you usually do after school?", "What are you studying in English this month?", "Do you want to have a big family one day?", "What is your family doing this weekend?", "How often do you have dinner together with your family?", "What do you think about your school timetable this year?", "Who in your family plays a musical instrument or does a sport?", "Is anyone in your family learning something new at the moment?", "What do you know about your grandparents' childhood?"], ["Tell me about your family. Who do you live with?", "What do you and your parents sometimes have arguments about?", "What is the biggest difference between childhood and adolescence?", "How much independence does a teenager need?", "What gives a young person confidence?", "Is ageism a problem for young people as well as for old people?", "What can teenagers and senior citizens learn from each other?", "Are family dinners important? Why or why not?", "Which stage of life do you think is the best, and why?", "What is one improvement you would like to make in your English this year?"]]},
+ {"t": "Unit 1 Revision", "s": "For Gabi · Gateway to the World B1", "lv": ["Words", "Grammar", "Articles", "Speaking"], "lvd": ["Family, ages, noun suffixes", "Present simple and continuous", "a, an, the or no article", "Full answers and opinions"], "q": [["What do we call your mother's or father's brother?", "What is the stage of life between childhood and adulthood called?", "What do we call a child who has no brothers or sisters?", "Who is your nephew: your brother's son or your uncle's son?", "What is the noun from the verb argue?", "What do we call a person who is over sixty-five?", "What is the noun from the adjective independent?", "Who is your stepfather?", "What is the noun from the verb improve?", "What do we call a family with only one parent at home?"], ["What are you doing right now?", "What do you usually do after school?", "What are you studying in English this month?", "Do you want to have a big family one day?", "What is your family doing this weekend?", "How often do you have dinner together with your family?", "What do you think about your school timetable this year?", "Who in your family plays a musical instrument or does a sport?", "Is anyone in your family learning something new at the moment?", "What do you know about your grandparents' childhood?"], ["What does your mother or father do?", "Do you play a musical instrument? Which one?", "What is the best film you have ever seen?", "Do you like dogs or cats more?", "Is there a park near your home? What is the park like?", "What do you usually have for breakfast?", "What time do you go to school, and what time do you go to bed?", "Which is hotter: the sun or the moon?", "Who is the oldest person in your family?", "What would you like to be when you grow up?"], ["Tell me about your family. Who do you live with?", "What do you and your parents sometimes have arguments about?", "What is the biggest difference between childhood and adolescence?", "How much independence does a teenager need?", "What gives a young person confidence?", "Is ageism a problem for young people as well as for old people?", "What can teenagers and senior citizens learn from each other?", "Are family dinners important? Why or why not?", "Which stage of life do you think is the best, and why?", "What is one improvement you would like to make in your English this year?"]]},
  {t:"Food",q:[
   ["Do you drink coffee or tea?","What do you usually eat for breakfast?","What is your favorite fruit?","Can you cook?","Do you like spicy food?","What do you eat for lunch?","What food do you not like?","How often do you eat pizza?","What is your favorite dessert?","Who cooks in your family?"],
   ["What is a dish you can cook well, and how do you make it?","Have you ever tried food from another country? What was it like?","Do you prefer eating at home or in a restaurant? Why?","What did you eat on your last birthday?","What food reminds you of your childhood?","How have your eating habits changed in the last few years?","What would you cook for a guest from another country?","Is it better to have a big breakfast or a big dinner?","What is the strangest food you have ever tried?","If you opened a café, what would be on the menu?"],
@@ -235,7 +235,7 @@ const V={
     <div class="topics">${ED.map((e,i)=>`<button class="topic" data-ed="${i}" aria-pressed="${S.ed===i}"><strong>${e.t}</strong><span>${e.s||e.q[0][0]}</span></button>`).join("")}</div>
   </section>
   <section class="pick"><h2>Pick a level</h2>
-    <div class="levels">${LV.map((l,i)=>`<button class="topic" data-lv="${i}" aria-pressed="${S.lv===i}"><strong>${lvn(i)}</strong><span>${lvd(i)}</span></button>`).join("")}</div>
+    <div class="levels">${(ED[S.ed].lv||LV).map((l,i)=>`<button class="topic" data-lv="${i}" aria-pressed="${S.lv===i}"><strong>${lvn(i)}</strong><span>${lvd(i)}</span></button>`).join("")}</div>
   </section>
   <div class="start"><button class="btn sun big" data-start>Start: ${ED[S.ed].t}, ${lvn(S.lv)}</button></div>
  </div>`,
@@ -266,7 +266,7 @@ const V={
   <div class="start">
     ${m?`<button class="btn sun big" data-redo>Redo the ${m} missed</button>`:""}
     <button class="btn" data-replay>Play this round again</button>
-    ${S.lv<2?`<button class="btn" data-next>Next: ${lvn(S.lv+1)}</button>`:""}
+    ${S.lv<ED[S.ed].q.length-1?`<button class="btn" data-next>Next: ${lvn(S.lv+1)}</button>`:""}
     <button class="btn" data-go="all">See all 10 questions</button>
   </div>
  </section>`},
@@ -294,7 +294,7 @@ const V={
 document.addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b)return; const d=b.dataset;
   if("go" in d)return go(d.go);
-  if("ed" in d){S.ed=+d.ed;return render()}
+  if("ed" in d){S.ed=+d.ed;S.lv=Math.min(S.lv,ED[S.ed].q.length-1);return render()}
   if("lv" in d){S.lv=+d.lv;return render()}
   if("start" in d){newRound();return go("wall")}
   if("face" in d){S.cur=+d.face;S.reveal=false;go("ask");return speak(S.cur)}
