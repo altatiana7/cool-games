@@ -153,7 +153,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.05}
 
 <script>
 const ED=[
- {"t": "Family and Ages", "s": "For Gabi · Gateway to the World B1, Unit 1", "q": [["How many people are there in your family?", "Are you an only child, or do you have brothers and sisters?", "Who do you spend the most time with at home?", "What are your parents doing at the moment?", "Do you often have arguments with anyone in your family?", "How often do you see your grandparents?", "Who in your family are you most similar to?", "What do you usually do together at the weekend?", "Are you reading a good book at the moment?", "At what age does a child become a teenager?"], ["What is the best thing about being a teenager?", "How much independence do your parents give you?", "What is the biggest difference between you and your parents?", "Do you think adolescence is harder now than it was for your parents? Why?", "When do you think a person really becomes an adult?", "What can young people learn from senior citizens?", "What do you and your family usually have discussions about?", "Would you prefer to be an only child or to have a big family? Why?", "Which stage of life do you think is the happiest: childhood, adolescence or middle age?", "What are you getting better at this year?"], ["Why do you think some adults have a negative attitude towards teenagers?", "Is ageism a problem only for old people, or for young people too?", "Should sixteen-year-olds be allowed to vote? Give your reasons.", "How much freedom should parents give a fourteen-year-old?", "What is the best way to end an argument between parents and children?", "Do teenagers today have more confidence than teenagers in the past?", "How is family life changing in the twenty-first century?", "Is it better to grow up in a small family or a large one?", "What does a person need in order to get independence from their parents?", "If you could stay one age forever, which age would you choose, and why?"]]},
+ {"t": "Unit 1 Revision", "s": "For Gabi · Gateway to the World B1", "lv": ["Words", "Grammar", "Speaking"], "lvd": ["Family, ages, noun suffixes", "Present simple and continuous", "Full answers and opinions"], "q": [["What do we call your mother's or father's brother?", "What is the stage of life between childhood and adulthood called?", "What do we call a child who has no brothers or sisters?", "Who is your nephew: your brother's son or your uncle's son?", "What is the noun from the verb argue?", "What do we call a person who is over sixty-five?", "What is the noun from the adjective independent?", "Who is your stepfather?", "What is the noun from the verb improve?", "What do we call a family with only one parent at home?"], ["What are you doing right now?", "What do you usually do after school?", "What are you studying in English this month?", "Do you want to have a big family one day?", "What is your family doing this weekend?", "How often do you have dinner together with your family?", "What do you think about your school timetable this year?", "Who in your family plays a musical instrument or does a sport?", "Is anyone in your family learning something new at the moment?", "What do you know about your grandparents' childhood?"], ["Tell me about your family. Who do you live with?", "What do you and your parents sometimes have arguments about?", "What is the biggest difference between childhood and adolescence?", "How much independence does a teenager need?", "What gives a young person confidence?", "Is ageism a problem for young people as well as for old people?", "What can teenagers and senior citizens learn from each other?", "Are family dinners important? Why or why not?", "Which stage of life do you think is the best, and why?", "What is one improvement you would like to make in your English this year?"]]},
  {t:"Food",q:[
   ["Do you drink coffee or tea?","What do you usually eat for breakfast?","What is your favorite fruit?","Can you cook?","Do you like spicy food?","What do you eat for lunch?","What food do you not like?","How often do you eat pizza?","What is your favorite dessert?","Who cooks in your family?"],
   ["What is a dish you can cook well, and how do you make it?","Have you ever tried food from another country? What was it like?","Do you prefer eating at home or in a restaurant? Why?","What did you eat on your last birthday?","What food reminds you of your childhood?","How have your eating habits changed in the last few years?","What would you cook for a guest from another country?","Is it better to have a big breakfast or a big dinner?","What is the strangest food you have ever tried?","If you opened a café, what would be on the menu?"],
@@ -195,6 +195,7 @@ const SPK=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8
 let S={ed:0,lv:0,marks:Array(10).fill(null),cur:0,reveal:false,slow:false,view:"home",redo:false,showQ:false};
 const $=s=>document.querySelector(s), view=$("#view");
 const qs=()=>ED[S.ed].q[S.lv];
+const lvn=i=>(ED[S.ed].lv||LV)[i], lvd=i=>(ED[S.ed].lvd||LVD)[i];
 const canSpeak="speechSynthesis" in window;
 let voices=[];
 function loadV(){try{voices=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang))}catch(e){}}
@@ -218,7 +219,7 @@ const got=()=>S.marks.filter(m=>m==="got").length, missed=()=>S.marks.filter(m=>
 
 function render(){
   const inGame=S.view!=="home";
-  $("#where").innerHTML=inGame?`<span class="chip">${ED[S.ed].t}</span><span class="chip">${LV[S.lv]}</span>`:"";
+  $("#where").innerHTML=inGame?`<span class="chip">${ED[S.ed].t}</span><span class="chip">${lvn(S.lv)}</span>`:"";
   $("#nav").innerHTML=inGame?[["home","Topics"],["wall","Faces"],["all","See all 10 questions"],["sheet","Worksheet"]]
     .map(([v,l])=>`<button class="btn${S.view===v?" on":""}" data-go="${v}">${l}</button>`).join(""):"";
   view.innerHTML=V[S.view]();
@@ -234,9 +235,9 @@ const V={
     <div class="topics">${ED.map((e,i)=>`<button class="topic" data-ed="${i}" aria-pressed="${S.ed===i}"><strong>${e.t}</strong><span>${e.s||e.q[0][0]}</span></button>`).join("")}</div>
   </section>
   <section class="pick"><h2>Pick a level</h2>
-    <div class="levels">${LV.map((l,i)=>`<button class="topic" data-lv="${i}" aria-pressed="${S.lv===i}"><strong>${l}</strong><span>${LVD[i]}</span></button>`).join("")}</div>
+    <div class="levels">${LV.map((l,i)=>`<button class="topic" data-lv="${i}" aria-pressed="${S.lv===i}"><strong>${lvn(i)}</strong><span>${lvd(i)}</span></button>`).join("")}</div>
   </section>
-  <div class="start"><button class="btn sun big" data-start>Start: ${ED[S.ed].t}, ${LV[S.lv]}</button></div>
+  <div class="start"><button class="btn sun big" data-start>Start: ${ED[S.ed].t}, ${lvn(S.lv)}</button></div>
  </div>`,
  wall:()=>`<div class="wrap" style="padding:0">
   <div class="wallhead"><h2>${S.redo?"Second chance":"Tap a face"}</h2><p>${S.redo?"Only the questions marked Not yet are open.":"Listen. Answer. Try again."}</p></div>
@@ -265,7 +266,7 @@ const V={
   <div class="start">
     ${m?`<button class="btn sun big" data-redo>Redo the ${m} missed</button>`:""}
     <button class="btn" data-replay>Play this round again</button>
-    ${S.lv<2?`<button class="btn" data-next>Next level: ${LV[S.lv+1]}</button>`:""}
+    ${S.lv<2?`<button class="btn" data-next>Next: ${lvn(S.lv+1)}</button>`:""}
     <button class="btn" data-go="all">See all 10 questions</button>
   </div>
  </section>`},
@@ -278,7 +279,7 @@ const V={
   <div class="start sheet-tools"><button class="btn${S.showQ?" on":""}" data-showq aria-pressed="${S.showQ}">${S.showQ?"Questions shown":"Blank: students write what they hear"}</button><button class="btn sun" data-print>Print</button></div>
   <article class="paper">
     <h2>10 Question Challenge: ${ED[S.ed].t}</h2>
-    <div class="meta"><span>Name:</span><span>Date:</span><span>Level: ${LV[S.lv]}</span></div>
+    <div class="meta"><span>Name:</span><span>Date:</span><span>Level: ${lvn(S.lv)}</span></div>
     <h3>Part A. Listen, write, answer</h3>
     <p>Write the question you hear. Then write your own full answer with a reason or an example.</p>
     <ol>${qs().map(q=>`<li>${S.showQ?`<div class="q">${q}</div>`:`<div class="rule"></div>`}<div class="rule"></div><div class="rule"></div></li>`).join("")}</ol>
