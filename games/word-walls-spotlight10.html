@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word Walls Spotlight 10</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&display=swap">
+<style>
+/* Layout: one screen. A single compact bar on top, one instruction line, and the wall fills the rest. */
+:root{
+  --bg:#f3e7d3; --card:#fffaf0; --ink:#33200f; --muted:#7a6248; --line:#c9b08c;
+  --acc:#c2571a; --acc-dark:#8f3c0c; --brick-a:#b4492a; --brick-b:#8a3a22; --brick-ink:#fff7ea; --brick-sub:#ffdcb4;
+  --mortar:#5a2314; --good:#2f7d4f; --bad:#b3261e; --bad-bg:#f6c1b6; --gold:#f2b632;
+  --font:"Archivo","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#211710; --card:#33261a; --ink:#f6ead6; --muted:#c7ae8c; --line:#6e573d;
+  --acc:#ef8a45; --acc-dark:#b55a1f; --bad-bg:#6b2a22; --good:#6fca95; --bad:#ff8f84; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#211710; --card:#33261a; --ink:#f6ead6; --muted:#c7ae8c; --line:#6e573d;
+  --acc:#ef8a45; --acc-dark:#b55a1f; --bad-bg:#6b2a22; --good:#6fca95; --bad:#ff8f84; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px}
+button{font-family:inherit;color:inherit}
+button:focus-visible,.tile:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+#app{height:100%;display:flex;flex-direction:column;gap:8px;padding-block:8px;padding-inline:16px;max-width:1500px;margin:0 auto}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.brand{font-weight:800;font-size:18px;color:var(--acc);white-space:nowrap}
+.brand small{font-weight:500;font-size:16px;color:var(--muted)}
+.seg{display:flex;border:2px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;padding:7px 12px;font-size:16px;font-weight:700;cursor:pointer;white-space:nowrap}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button.on{background:var(--acc);color:#fff}
+.stat{font-weight:700;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.dots{letter-spacing:3px;color:var(--bad)}
+.sp{flex:1}
+.pill{border:2px solid var(--line);background:var(--card);border-radius:8px;padding:7px 12px;font-size:16px;font-weight:700;cursor:pointer;white-space:nowrap}
+.pill:disabled{opacity:.45;cursor:default}
+.strip{display:flex;align-items:center;gap:14px;min-height:52px;background:var(--card);border:2px solid var(--line);border-radius:10px;padding:8px 14px}
+.strip .txt{flex:1;min-width:0;font-size:19px;font-weight:500;line-height:1.3}
+.strip .txt b{font-weight:800}
+.strip .q{font-size:23px;font-weight:700}
+.strip .ok{color:var(--good)} .strip .no{color:var(--bad)}
+.btn{background:var(--acc);color:#fff;border:0;border-bottom:4px solid var(--acc-dark);border-radius:10px;padding:10px 20px;font-size:18px;font-weight:800;cursor:pointer;white-space:nowrap}
+.btn:active{transform:translateY(2px)}
+.grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:1fr;gap:6px;background:var(--mortar);padding:6px;border-radius:10px}
+.grid.w15{grid-template-columns:repeat(5,1fr)}
+.tile{position:relative;perspective:800px;cursor:pointer;min-height:64px;border:0;background:none;padding:0}
+.fl{position:absolute;inset:0;transition:transform .55s;transform-style:preserve-3d}
+.tile.ok .fl{transform:rotateY(180deg)}
+.fa,.fb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border-radius:6px;padding:4px 8px;line-height:1.15}
+.fa{background:var(--card);color:var(--ink);font-size:21px;font-weight:800}
+.phr .fa{font-size:18px}
+.fb{transform:rotateY(180deg);background:linear-gradient(135deg,var(--brick-a),var(--brick-b));box-shadow:inset 0 -4px 0 rgba(0,0,0,.25);color:var(--brick-ink)}
+.fb b{font-size:21px;font-weight:800}
+.phr .fb b{font-size:18px}
+.fb span{font-size:15px;color:var(--brick-sub);margin-top:3px;font-weight:500}
+.tile.hint .fa{box-shadow:inset 0 0 0 4px var(--gold)}
+.tile.bad .fa{background:var(--bad-bg);animation:sh .4s}
+.tile.gone{visibility:hidden}
+.quiz .fb span{display:none}
+.quiz .fb b{font-size:24px}
+.quiz.phr .fb b{font-size:20px}
+.quiz .tile.bad .fb{animation:sh .4s;background:var(--bad)}
+.quiz .tile.won .fb{background:linear-gradient(135deg,#e0a21f,#b9790c);color:#2b1a05}
+.quiz .tile.hint .fb{box-shadow:inset 0 0 0 4px var(--gold)}
+@keyframes sh{25%{transform:rotateY(180deg) translateX(6px)}75%{transform:rotateY(180deg) translateX(-6px)}}
+.tile.bad .fa{animation-name:sh2}
+@keyframes sh2{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.end{flex:1;min-height:0;overflow:auto;background:var(--card);border:2px solid var(--line);border-radius:10px;padding:18px 22px;display:flex;flex-direction:column;gap:12px}
+.end h2{margin:0;font-size:30px;font-weight:800;color:var(--acc);text-wrap:balance}
+.nums{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.end h3{margin:6px 0 0;font-size:19px}
+.end ul{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font-size:18px;line-height:1.35}
+.end li b{font-weight:800}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto}
+@media (max-width:760px){
+  html,body{height:auto}
+  #app{height:auto;min-height:100%}
+  .grid,.grid.w15{grid-template-columns:repeat(2,1fr);grid-auto-rows:84px;flex:none}
+  .strip{flex-wrap:wrap}
+  .strip .q{font-size:20px}
+}
+@media (prefers-reduced-motion:reduce){.fl{transition:none}.tile.bad .fa,.quiz .tile.bad .fb{animation:none}}
+</style>
+</head><body>
+<div id="app"></div>
+<script>
+const WALLS=[
+{tab:'1a Teen life',phr:1,task:'Tap the correct phrases for teenage activities. The other tiles have a mistake in them.',
+w:[
+['hang out with friends','spend free time together','No plans, no hurry. On Saturdays I just ___ at the mall.'],
+['catch a film','go and see a film','There is a new comedy on at the cinema. Let’s ___ tonight.'],
+['chat online','talk over the internet','My cousin lives in Canada, so we ___ every evening.'],
+['grab a bite','eat something quickly','I’m hungry, but we only have ten minutes. Let’s ___ at the pizzeria.'],
+['go clubbing','go dancing at night clubs','They love dancing till late, so on Fridays they ___.'],
+['surf the Net','look at different websites','I need some facts for my project, so I’ll ___ for an hour.'],
+['go window shopping','look at shops without buying','We have no money, but we can still ___ and look at the new collections.'],
+['play computer games','play on a PC or console','He can ___ for hours. He is on level 40 already.'],
+['do extreme sports','do risky sports like skydiving','Snowboarding, bungee jumping, skydiving: I love to ___.'],
+['send text messages','write short notes on a phone','Phones must be silent in class, but some students still ___ under the desk.'],
+['listen to music','enjoy songs and tunes','On the bus I put my headphones on and ___.'],
+['go on trips to the countryside','travel out of town for a day','At weekends we leave the city and ___ to get some fresh air.'],
+['spend time with family','be together with relatives','On Sundays I stay at home and ___. We cook and play board games.'],
+['do voluntary work','work to help, without pay','Twice a month we ___ at an animal shelter. Nobody pays us.'],
+['run errands','do small jobs for someone','I ___ for my gran: I go to the chemist’s and the post office for her.']],
+t:[
+['hang up with friends','hang OUT with friends. To hang up is to end a phone call.'],
+['take a film','We say CATCH a film.'],
+['grab a film','We CATCH a film and GRAB a bite.'],
+['catch a bite','We say GRAB a bite.'],
+['do clubbing','We say GO clubbing.'],
+['play extreme sports','We say DO extreme sports.'],
+['go to window shopping','No "to": GO window shopping.'],
+['make voluntary work','We say DO voluntary work.'],
+['make errands','We say RUN errands.'],
+['listen music','Listen TO music.'],
+['go on trips to the nature','In English it is the COUNTRYSIDE, not "the nature".'],
+['spend time to family','Spend time WITH family.'],
+['do computer games','We say PLAY computer games.'],
+['chat in online','No preposition: chat online.'],
+['surf at the Net','No preposition: surf the Net.']]},
+{tab:'1b Character',task:'Tap the adjectives that describe character. Nouns, verbs and words about looks are traps.',
+w:[
+['loyal','always stands by friends','Kim never tells my secrets and always stands by me. She is so ___.'],
+['selfish','cares only about himself','Tom never shares anything and thinks only about himself. He is ___.'],
+['aggressive','gets angry and ready to fight','He shouts and starts fights when he loses. He is very ___.'],
+['patient','stays calm and can wait','Our teacher explains things again and again and never gets angry. She is ___.'],
+['respected','admired by many people','Everyone admires Dr Lee and listens to her opinion. She is a ___ doctor.'],
+['dedicated','works hard for what matters','Anna trains six days a week and never misses a session. She is a ___ athlete.'],
+['mean','unkind; hates sharing','He never lends anyone a penny and says unkind things. He is ___.'],
+['jealous','unhappy that others have more','Liz gets upset when her best friend talks to other girls. She is ___.'],
+['creative','full of new, original ideas','Max writes songs and designs his own clothes. He is very ___.'],
+['trusting','believes people are honest','She believes everything people tell her. She is too ___.'],
+['dishonest','tells lies and cheats','He cheats in tests and lies to his parents. He is ___.'],
+['supportive','gives help and encouragement','When I failed my exam, my friends helped and encouraged me. They were really ___.'],
+['moody','changes mood quickly','One minute she is laughing, the next she is cross. She is so ___.'],
+['well-meaning','tries to help, not always well','Gran’s advice doesn’t always help, but she wants the best for us. She is ___.'],
+['caring','kind, looks after others','The nurse is kind and looks after everyone. She is very ___.']],
+t:[
+['slim','It describes looks, not character.'],['wavy','It describes hair, not character.'],['pale','It describes skin, not character.'],
+['tanned','It describes skin, not character.'],['curly','It describes hair, not character.'],
+['loyalty','A noun. The adjective is loyal.'],['patience','A noun. The adjective is patient.'],['jealousy','A noun. The adjective is jealous.'],['honesty','A noun. The adjectives are honest and dishonest.'],
+['betray','A verb: to betray a friend.'],['admire','A verb: to admire somebody.'],['trust','A verb or noun. The adjective is trusting.'],
+['support','A verb or noun. The adjective is supportive.'],['respect','A verb or noun. The adjective is respected.'],['create','A verb. The adjective is creative.']]},
+{tab:'1d Appearance',task:'Tap the words that describe how a person looks. Words about character are traps.',
+w:[
+['slim','thin in an attractive way','She does yoga and eats well, so she is ___ and fit.'],
+['plump','slightly fat, rounded','The baby has soft, ___ cheeks.'],
+['skinny','too thin','He was so ___ that his jeans kept falling down.'],
+['well-built','big and strong, with muscles','The rugby players were tall and ___.'],
+['overweight','heavier than is healthy','The doctor said he was ___ and should exercise more.'],
+['curly','hair in small tight rings','Her hair is so ___ that she can hardly get a comb through it.'],
+['wavy','hair with gentle curves','Her hair isn’t in tight rings and it isn’t flat. It is long and ___.'],
+['straight','hair with no curls or waves','She irons her curls every morning to make her hair ___.'],
+['shoulder-length','hair that reaches the shoulders','Her hair isn’t long or short. It is ___.'],
+['pale','skin with very little colour','You look ___. Are you feeling ill?'],
+['tanned','brown from the sun','They came back from Spain looking ___ and relaxed.'],
+['freckled','with small brown spots','The red-haired boy had a ___ face, with tiny brown spots on his cheeks.'],
+['upturned','a nose that curves up at the tip','She has a small ___ nose that points up at the end.'],
+['crooked','not straight, bent','The boxer’s nose was ___ after he broke it twice.'],
+['elegant','graceful and stylish','She looked ___ in a long black dress.']],
+t:['loyal','selfish','aggressive','patient','respected','dedicated','mean','jealous','creative','trusting','dishonest','supportive','moody','well-meaning','caring'].map(x=>[x,'It describes character, not looks.'])}
+];
+const DIFF={practice:['Practice',Infinity],standard:['Standard',5],challenge:['Challenge',3]};
+const QN=10;
+let S={wall:0,diff:'standard'},G;
+const A=document.getElementById('app'),$=id=>document.getElementById(id);
+const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const say=w=>{try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(w);u.lang='en-GB';u.rate=.9;speechSynthesis.speak(u)}catch(e){}};
+
+function start(){
+  const W=WALLS[S.wall];
+  G={W,phase:'build',lives:DIFF[S.diff][1],found:0,hints:3,miss:[],firstTry:0,qi:0,q:[]};
+  A.innerHTML=`<div class="bar">
+    <div class="brand">Word Walls <small>Spotlight 10 · Module 1</small></div>
+    <div class="seg" id="tabs">${WALLS.map((w,i)=>`<button data-i="${i}" class="${i==S.wall?'on':''}">${w.tab}</button>`).join('')}</div>
+    <div class="seg" id="dif">${Object.entries(DIFF).map(([k,d])=>`<button data-k="${k}" class="${k==S.diff?'on':''}">${d[0]}</button>`).join('')}</div>
+    <div class="sp"></div>
+    <div class="stat" id="cnt"></div><div class="stat" id="hp"></div>
+    <button class="pill" id="hint"></button><button class="pill" id="again">Restart</button><button class="pill" id="fs">Full screen</button>
+  </div>
+  <div class="strip" id="strip"></div>
+  <div class="grid ${W.phr?'phr':''}" id="grid"></div>`;
+  $('tabs').onclick=e=>{const b=e.target.closest('button');if(b){S.wall=+b.dataset.i;start()}};
+  $('dif').onclick=e=>{const b=e.target.closest('button');if(b){S.diff=b.dataset.k;start()}};
+  $('again').onclick=start;
+  $('fs').onclick=()=>{try{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();p&&p.catch&&p.catch(()=>{})}catch(e){}};
+  $('hint').onclick=hint;
+  const defs=Object.fromEntries(W.w.map(x=>[x[0],x[1]]));
+  $('grid').innerHTML=sh([...W.w.map(x=>x[0]),...W.t.map(x=>x[0])]).map(w=>
+    `<button class="tile" data-w="${esc(w)}"><span class="fl"><span class="fa">${esc(w)}</span><span class="fb"><b>${esc(w)}</b><span>${esc(defs[w]||'')}</span></span></span></button>`).join('');
+  $('grid').onclick=e=>{const t=e.target.closest('.tile');if(t)tap(t)};
+  strip(`<div class="txt">${W.task}</div>`);
+  hud();
+}
+function strip(h){$('strip').innerHTML=h}
+function hud(){
+  const W=G.W,N=W.w.length,max=DIFF[S.diff][1];
+  $('cnt').textContent=G.phase=='test'?`Question ${Math.min(G.qi+1,G.q.length)}/${G.q.length}`:`Bricks ${G.found}/${N}`;
+  $('hp').innerHTML=max===Infinity?'Lives: no limit':`Lives <span class="dots">${'●'.repeat(G.lives)}${'○'.repeat(max-G.lives)}</span>`;
+  $('hint').textContent=`Hint (${G.hints})`;$('hint').disabled=!G.hints||G.phase=='wall';
+}
+function lose(){if(G.lives!==Infinity){G.lives--;if(G.lives<=0){hud();setTimeout(()=>end(false),700);return true}}return false}
+function shake(t){t.classList.remove('bad');void t.offsetWidth;t.classList.add('bad');setTimeout(()=>t.classList.remove('bad'),450)}
+function tap(t){
+  const W=G.W,w=t.dataset.w;
+  if(G.phase=='end'||G.lock)return;
+  if(G.phase=='test')return answer(t);
+  say(w);
+  if(t.classList.contains('ok')||G.phase=='wall'){const d=W.w.find(x=>x[0]==w);if(d)strip(stripWall(`<b>${esc(w)}</b>: ${esc(d[1])}`));return}
+  const good=W.w.find(x=>x[0]==w);
+  if(good){t.classList.remove('hint');t.classList.add('ok');G.found++;
+    strip(`<div class="txt ok"><b>✓ ${esc(w)}</b>: ${esc(good[1])}</div>`);
+    if(G.found==W.w.length){G.lock=1;setTimeout(wallDone,900)}
+  }else{const tr=W.t.find(x=>x[0]==w);shake(t);
+    strip(`<div class="txt no"><b>✕ ${esc(w)}</b>. ${esc(tr[1])}</div>`);
+    if(!G.miss.some(m=>m.k==w))G.miss.push({k:w,h:`<b>${esc(w)}</b> is a trap. ${esc(tr[1])}`});
+    if(lose())G.lock=1}
+  hud();
+}
+function stripWall(msg){return `<div class="txt">${msg||'<b>The wall stands.</b> Tap a brick to hear the word, then test the wall.'}</div><button class="btn" id="go">Test the wall</button>`}
+function wallDone(){
+  G.lock=0;G.phase='wall';
+  const g=$('grid');g.querySelectorAll('.tile:not(.ok)').forEach(e=>e.remove());g.classList.add('w15');
+  strip(stripWall());hud();confetti(120);
+}
+document.addEventListener('click',e=>{if(e.target.id=='go')test()});
+function test(){
+  G.phase='test';G.q=sh(G.W.w).slice(0,QN);G.qi=0;$('grid').classList.add('quiz');ask();
+}
+function ask(){
+  G.lock=0;G.tried=0;
+  $('grid').querySelectorAll('.tile').forEach(e=>e.classList.remove('won','hint'));
+  const q=G.q[G.qi];
+  strip(`<div class="txt q">${esc(q[2]).replace('___','<span class="no">_______</span>')}</div>`);hud();
+}
+function answer(t){
+  const q=G.q[G.qi],w=t.dataset.w;
+  if(w==q[0]){G.lock=1;say(w);t.classList.add('won');if(!G.tried)G.firstTry++;
+    strip(`<div class="txt q">${esc(q[2]).replace('___',`<b class="ok">${esc(w)}</b>`)}</div>`);
+    setTimeout(()=>{G.qi++;G.qi<G.q.length?ask():end(true)},1300);
+  }else{shake(t);G.tried=1;
+    if(!G.miss.some(m=>m.k=='q'+q[0]))G.miss.push({k:'q'+q[0],h:esc(q[2]).replace('___',`<b>${esc(q[0])}</b>`)+` You chose <b>${esc(w)}</b>.`});
+    if(lose())G.lock=1;hud()}
+}
+function hint(){
+  if(!G.hints)return;
+  let el;
+  if(G.phase=='build')el=[...$('grid').querySelectorAll('.tile:not(.ok):not(.hint)')].find(e=>G.W.w.some(x=>x[0]==e.dataset.w));
+  else if(G.phase=='test'&&!G.lock){el=[...$('grid').querySelectorAll('.tile')].find(e=>e.dataset.w==G.q[G.qi][0]);G.tried=1}
+  if(el){el.classList.add('hint');G.hints--;hud()}
+}
+function end(win){
+  const W=G.W,N=W.w.length,built=G.found==N;G.phase='end';
+  const next=(S.wall+1)%WALLS.length;
+  $('strip').remove();
+  const box=document.createElement('div');box.className='end';
+  box.innerHTML=`<h2>${win?'The wall stands. Well done!':'The wall fell down.'}</h2>
+  <div class="nums"><span>Bricks: ${G.found}/${N}</span>${built?`<span>Right first time: ${G.firstTry}/${G.q.length||QN}</span>`:''}<span>Mistakes: ${G.miss.length}</span></div>
+  ${G.miss.length?`<h3>Look at these again</h3><ul>${G.miss.map(m=>`<li>${m.h}</li>`).join('')}</ul>`:'<h3>No mistakes. A perfect wall.</h3>'}
+  <div class="acts"><button class="btn" id="pa">Play again</button><button class="pill" id="nx">Next wall: ${WALLS[next].tab}</button></div>`;
+  $('grid').replaceWith(box);hud();$('hint').disabled=true;
+  $('pa').onclick=start;$('nx').onclick=()=>{S.wall=next;start()};
+  if(win)confetti(260);
+}
+function confetti(n){
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const c=document.createElement('canvas');c.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9';c.width=innerWidth;c.height=innerHeight;document.body.appendChild(c);
+  const g=c.getContext('2d'),col=['#c2571a','#f2b632','#8a3a22','#2f7d4f','#fffaf0'];
+  const p=[...Array(n)].map(()=>({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*18,vy:-Math.random()*15-2,r:Math.random()*6+4,c:col[Math.floor(Math.random()*5)],a:1}));
+  (function f(){g.clearRect(0,0,c.width,c.height);let k=0;p.forEach(q=>{q.x+=q.vx;q.y+=q.vy;q.vy+=.4;q.a-=.012;if(q.a>0){k++;g.globalAlpha=q.a;g.fillStyle=q.c;g.fillRect(q.x,q.y,q.r,q.r*1.6)}});k?requestAnimationFrame(f):c.remove()})();
+}
+start();
+</script>
+</body></html>

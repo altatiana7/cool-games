@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Spotlight 11 · Module 1 · SPEED GAME</title>
+<style>
+  :root{
+    --bg:#f4f8ff;
+    --panel:#ffffff;
+    --panel2:#f3f7ff;
+    --text:#ffffff;
+    --muted:#d8e2ff;
+    --cyan:#35dfff;
+    --pink:#ff53c8;
+    --lime:#c2ff38;
+    --orange:#ffb321;
+    --red:#ff5577;
+    --line:rgba(255,255,255,.28);
+    --shadow:0 16px 34px rgba(52,78,138,.16);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
+  button{font:inherit}
+  .app{height:100vh;min-height:100vh;position:relative;overflow:hidden;background:
+      radial-gradient(circle at 18% 20%,rgba(53,223,255,.26),transparent 34%),
+      radial-gradient(circle at 82% 18%,rgba(255,83,200,.22),transparent 30%),
+      radial-gradient(circle at 72% 84%,rgba(194,255,56,.22),transparent 30%),
+      linear-gradient(180deg,#fbfdff 0%,#eef4ff 48%,#e3edff 100%)}
+  .screen{position:absolute;inset:0;display:none;padding:22px;animation:fade .22s ease}
+  .screen.active{display:flex;flex-direction:column}
+  @keyframes fade{from{opacity:0;transform:scale(.992)}to{opacity:1;transform:none}}
+
+  /* START */
+  #start{padding:0;background:#f7fbff}
+  .hero{
+    position:absolute;inset:0;
+    background:
+      linear-gradient(90deg,rgba(34,58,112,.74) 0%,rgba(34,58,112,.62) 42%,rgba(34,58,112,.14) 74%,rgba(34,58,112,.34) 100%),
+      url('https://images.pexels.com/photos/5676667/pexels-photo-5676667.jpeg?auto=compress&dpr=1&w=1600') center/cover no-repeat;
+    filter:saturate(1.08) contrast(1.03)
+  }
+  .heroGrid{position:relative;z-index:2;height:100%;padding:4.5vh 4.5vw;display:grid;grid-template-columns:minmax(340px,.82fr) minmax(520px,1.18fr);gap:4vw;align-items:center}
+  .eyebrow{display:inline-flex;gap:10px;align-items:center;font-size:clamp(12px,1vw,16px);letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:800}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:0 0 18px var(--lime)}
+  h1{font-size:clamp(52px,6.2vw,104px);line-height:.86;margin:18px 0 18px;letter-spacing:-.065em;text-transform:uppercase;max-width:760px}
+  h1 span{display:block;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.78)}
+  .sub{max-width:680px;font-size:clamp(17px,1.35vw,25px);line-height:1.38;color:#dbe1f1}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+  .chip{padding:9px 12px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.14);backdrop-filter:blur(8px);font-size:13px;color:#ffffff}
+  .launchGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-self:stretch}
+  .launchCard{position:relative;min-height:205px;padding:22px;border:1px solid rgba(255,255,255,.36);border-radius:28px;background:linear-gradient(145deg,rgba(63,88,155,.95),rgba(40,58,111,.92));box-shadow:var(--shadow);cursor:pointer;overflow:hidden;transition:.2s ease;text-align:left;color:white}
+  .launchCard:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.38)}
+  .launchCard:before{content:"";position:absolute;width:160px;height:160px;border-radius:50%;right:-45px;top:-55px;filter:blur(3px);opacity:.36}
+  .launchCard:nth-child(1):before{background:var(--cyan)}
+  .launchCard:nth-child(2):before{background:var(--pink)}
+  .launchCard:nth-child(3):before{background:var(--orange)}
+  .launchCard:nth-child(4):before{background:var(--lime)}
+  .num{font-size:13px;font-weight:900;letter-spacing:.18em;color:var(--muted)}
+  .cardTitle{font-size:clamp(25px,2vw,35px);font-weight:900;line-height:1.05;margin:28px 0 10px;letter-spacing:-.04em}
+  .cardText{color:#bfc8de;font-size:14px;line-height:1.35;max-width:90%}
+  .arrow{position:absolute;right:20px;bottom:18px;font-size:28px}
+
+  /* SHARED GAME */
+  .topbar{height:64px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.20);padding-bottom:14px}
+  .back,.iconBtn,.miniBtn{border:1px solid rgba(255,255,255,.26);background:rgba(255,255,255,.13);color:white;border-radius:14px;cursor:pointer;transition:.18s}
+  .back{height:46px;padding:0 16px;font-weight:800}
+  .back:hover,.iconBtn:hover,.miniBtn:hover{background:rgba(255,255,255,.13)}
+  .gameName{font-weight:900;font-size:21px;letter-spacing:-.02em}
+  .gameTag{color:var(--muted);font-size:13px;margin-left:6px}
+  .spacer{flex:1}
+  .scoreBox{display:flex;align-items:center;gap:9px;padding:9px 13px;border:1px solid rgba(255,255,255,.28);border-radius:14px;background:rgba(255,255,255,.14);font-weight:800}
+  .scoreNum{font-size:21px;color:var(--lime);min-width:27px;text-align:center}
+  .iconBtn{height:44px;min-width:44px;padding:0 13px;font-weight:800}
+  .gameBody{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;padding-top:18px}
+  .stage{min-width:0;border:1px solid rgba(255,255,255,.28);border-radius:28px;background:linear-gradient(160deg,rgba(79,102,171,.97),rgba(46,65,125,.95));box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;overflow:hidden;padding:22px}
+  .stage:before{content:"";position:absolute;inset:auto -10% -55% auto;width:55%;aspect-ratio:1;border-radius:50%;background:var(--accent,var(--cyan));filter:blur(95px);opacity:.09;pointer-events:none}
+  .side{border:1px solid rgba(255,255,255,.26);border-radius:28px;background:rgba(73,94,156,.90);padding:18px;display:flex;flex-direction:column;gap:12px;min-height:0}
+  .side h3{margin:0;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}
+  .instructions{font-size:15px;line-height:1.45;color:#d7dded}
+  .keys{margin-top:auto;display:grid;grid-template-columns:auto 1fr;gap:7px 10px;font-size:12px;color:var(--muted);align-items:center}
+  kbd{padding:5px 8px;border-radius:7px;border:1px solid var(--line);background:#243457;color:#fff;font:700 11px/1 monospace;text-align:center}
+  .roundPill{display:inline-flex;align-items:center;align-self:flex-start;padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.14);color:#ffffff;font-size:13px;font-weight:800;border:1px solid rgba(255,255,255,.24)}
+  .promptWrap{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px}
+  .prompt{font-size:clamp(34px,4.3vw,74px);font-weight:900;line-height:1.05;letter-spacing:-.045em;max-width:1100px;text-wrap:balance}
+  .prompt .gap{color:var(--accent,var(--cyan));border-bottom:4px solid currentColor;padding:0 .12em}
+  .footerControls{display:flex;gap:12px;align-items:center;justify-content:center;min-height:62px}
+  .action{border:0;border-radius:18px;padding:15px 23px;font-weight:900;font-size:16px;cursor:pointer;transition:.18s;min-width:130px}
+  .action:hover{transform:translateY(-2px)}
+  .primary{background:var(--accent,var(--cyan));color:#09101a}
+  .secondary{background:rgba(255,255,255,.10);color:white;border:1px solid var(--line)}
+  .good{background:var(--lime);color:#142006}
+  .bad{background:#352038;color:#ffd9f6;border:1px solid rgba(255,79,216,.35)}
+  .timerRing{width:176px;height:176px;position:relative;margin:6px auto 4px}
+  .timerRing svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .timerRing circle{fill:none;stroke-width:10}
+  .timerRing .track{stroke:rgba(255,255,255,.10)}
+  .timerRing .progress{stroke:var(--accent,var(--cyan));stroke-linecap:round;transition:stroke-dashoffset .2s linear}
+  .timeText{position:absolute;inset:0;display:grid;place-items:center;font-size:48px;font-weight:950;letter-spacing:-.05em}
+  .timeLabel{text-align:center;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900}
+  .miniRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .miniBtn{padding:10px;font-size:13px;font-weight:800}
+  .progressBar{height:10px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden}
+  .progressFill{height:100%;width:0;background:linear-gradient(90deg,var(--accent,var(--cyan)),#fff);transition:.25s}
+
+  /* GAME 2 */
+  .splitSentence{display:flex;flex-direction:column;gap:22px;align-items:center;justify-content:center;flex:1;padding:25px;text-align:center}
+  .sentenceLead{font-size:clamp(32px,4vw,68px);font-weight:900;letter-spacing:-.045em;line-height:1.06;max-width:1050px}
+  .ending{font-size:clamp(25px,3vw,48px);line-height:1.12;font-weight:800;color:var(--lime);padding:18px 24px;border-radius:20px;border:1px solid rgba(183,255,79,.25);background:rgba(183,255,79,.07);opacity:0;transform:translateY(8px);transition:.22s;max-width:1000px}
+  .ending.visible{opacity:1;transform:none}
+  .clue{font-size:14px;color:var(--muted);margin-top:-8px}
+
+  /* AUDIO */
+  .audioOrb{width:min(33vw,280px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,rgba(255,173,66,.32),rgba(255,173,66,.06) 56%,transparent 58%);border:1px solid rgba(255,173,66,.30);box-shadow:0 0 90px rgba(255,173,66,.12);cursor:pointer;transition:.2s;position:relative}
+  .audioOrb:hover{transform:scale(1.025)}
+  .audioOrb:before,.audioOrb:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,173,66,.25);inset:16%;animation:pulse 2s infinite}
+  .audioOrb:after{inset:29%;animation-delay:.5s}
+  @keyframes pulse{0%,100%{opacity:.35;transform:scale(.95)}50%{opacity:.9;transform:scale(1.06)}}
+  .speaker{font-size:72px;filter:grayscale(1) brightness(2)}
+  .audioHint{font-size:clamp(18px,1.7vw,27px);font-weight:800;margin-top:20px;color:#dfe5f5}
+  .answerCard{font-size:clamp(30px,4vw,65px);font-weight:950;color:var(--orange);min-height:80px;display:grid;place-items:center;text-align:center;opacity:0;transition:.2s}
+  .answerCard.visible{opacity:1}
+
+  /* VOCAB RUSH */
+  .rushBody{grid-template-columns:minmax(0,1fr) 260px}
+  .rushStage{padding:18px}
+  .rushHeader{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .modeSwitch{display:flex;gap:7px;padding:5px;border-radius:13px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+  .modeSwitch button{border:0;background:transparent;color:var(--muted);font-weight:900;padding:8px 12px;border-radius:9px;cursor:pointer}
+  .modeSwitch button.active{background:var(--lime);color:#142006}
+  .wordGrid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-rows:1fr;gap:9px}
+  .wordTile{position:relative;border:1px solid rgba(255,255,255,.24);background:linear-gradient(145deg,#4865b2,#31488d);border-radius:15px;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;cursor:pointer;transition:.17s;font-size:clamp(14px,1.25vw,21px);font-weight:900;line-height:1.05;overflow:hidden}
+  .wordTile:hover{transform:translateY(-2px);border-color:rgba(183,255,79,.55)}
+  .wordTile.done{background:rgba(183,255,79,.13);border-color:rgba(183,255,79,.65);color:var(--lime);transform:scale(.96);opacity:.72}
+  .translation{font-size:10px;position:absolute;left:5px;right:5px;bottom:5px;color:#aeb8d2;font-weight:600;opacity:0;transition:.15s}
+  .wordTile:hover .translation{opacity:1}
+  .bigScore{text-align:center;font-size:62px;font-weight:950;color:var(--lime);line-height:1;margin:7px 0}
+  .bigScoreLabel{text-align:center;font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);font-weight:900}
+  .finishOverlay{position:absolute;inset:0;background:rgba(76,98,161,.58);backdrop-filter:blur(9px);display:none;align-items:center;justify-content:center;z-index:30}
+  .finishOverlay.show{display:flex}
+  .finishCard{text-align:center;padding:35px 48px;border:1px solid rgba(255,255,255,.30);border-radius:28px;background:linear-gradient(150deg,#5a76c9,#3d56a8);box-shadow:var(--shadow)}
+  .finishCard .finalNum{font-size:92px;font-weight:950;color:var(--lime);line-height:.9}
+  .finishCard h2{font-size:30px;margin:14px 0 8px}
+  .finishCard p{color:var(--muted);margin:0 0 22px}
+
+  .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#f7f8ff;color:#0b0d18;padding:10px 16px;border-radius:12px;font-weight:900;z-index:99;transition:.2s}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @media (max-width: 1050px){
+    .heroGrid{grid-template-columns:1fr;gap:22px;padding:30px}.hero{background-position:65% center}.launchGrid{grid-template-columns:repeat(4,1fr)}.launchCard{min-height:150px;padding:16px}.cardTitle{font-size:21px;margin-top:18px}.cardText{display:none}
+    .gameBody{grid-template-columns:1fr 230px}.wordGrid{grid-template-columns:repeat(4,1fr)}
+  }
+  @media (max-width: 760px){
+    html,body{overflow:auto}.app{min-height:100dvh;height:auto}.screen{position:relative;min-height:100dvh}.screen:not(.active){display:none}
+    .heroGrid{display:flex;flex-direction:column;justify-content:center}.hero{position:fixed}.launchGrid{grid-template-columns:1fr 1fr;width:100%}.launchCard{min-height:135px}.cardText{display:block;font-size:12px}.gameBody,.rushBody{grid-template-columns:1fr}.side{display:none}.topbar{height:auto;flex-wrap:wrap}.gameTag{display:none}.prompt{font-size:36px}.wordGrid{grid-template-columns:repeat(3,1fr);grid-auto-rows:92px}.rushStage{min-height:670px}.screen{padding:12px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <section id="start" class="screen active">
+    <div class="hero"></div>
+    <div class="heroGrid">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> Spotlight 11 · Module 1 · Relationships</div>
+        <h1>Speed <span>Game</span></h1>
+        <div class="sub">Fast revision for Grade 11: speaking, prediction, listening accuracy and active vocabulary.</div>
+        <div class="chips"><span class="chip">Interactive board</span><span class="chip">B2</span><span class="chip">British voice</span><span class="chip">4 game modes</span></div>
+      </div>
+      <div class="launchGrid">
+        <button class="launchCard" onclick="openGame('g1')"><div class="num">01 · SPEAK</div><div class="cardTitle">20 SEC<br>FINISH</div><div class="cardText">Continue the sentence before the timer hits zero.</div><div class="arrow">↗</div></button>
+        <button class="launchCard" onclick="openGame('g2')"><div class="num">02 · PREDICT</div><div class="cardTitle">GUESS THE<br>ENDING</div><div class="cardText">Complete the line, then reveal the textbook-style ending.</div><div class="arrow">↗</div></button>
+        <button class="launchCard" onclick="openGame('g3')"><div class="num">03 · LISTEN</div><div class="cardTitle">MISSING<br>WORD</div><div class="cardText">Hear the sentence with a gap and catch the missing word.</div><div class="arrow">↗</div></button>
+        <button class="launchCard" onclick="openGame('g4')"><div class="num">04 · VOCAB</div><div class="cardTitle">60 SEC<br>RUSH</div><div class="cardText">Translate as many Module 1 words and phrasal verbs as possible.</div><div class="arrow">↗</div></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAME 1 -->
+  <section id="g1" class="screen" style="--accent:var(--cyan)">
+    <div class="topbar">
+      <button class="back" onclick="goHome()">← MENU</button>
+      <div><span class="gameName">20 SEC FINISH</span><span class="gameTag">Continue naturally</span></div>
+      <div class="spacer"></div>
+      <div class="scoreBox">SCORE <span id="g1Score" class="scoreNum">0</span></div>
+      <button class="iconBtn" onclick="toggleFull()">⛶</button>
+    </div>
+    <div class="gameBody">
+      <div class="stage">
+        <div id="g1Round" class="roundPill">ROUND 1 / 12</div>
+        <div class="promptWrap"><div id="g1Prompt" class="prompt"></div></div>
+        <div class="footerControls">
+          <button id="g1Start" class="action primary" onclick="startG1Timer()">START 20 SEC</button>
+          <button class="action good" onclick="g1Correct()">✓ +1</button>
+          <button class="action secondary" onclick="nextG1()">NEXT →</button>
+        </div>
+        <div class="progressBar"><div id="g1Progress" class="progressFill"></div></div>
+      </div>
+      <aside class="side">
+        <h3>Countdown</h3>
+        <div class="timerRing">
+          <svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="51"></circle><circle id="g1Ring" class="progress" cx="60" cy="60" r="51"></circle></svg>
+          <div id="g1Time" class="timeText">20</div>
+        </div>
+        <div class="timeLabel">seconds to finish</div>
+        <div class="instructions"><b>Student:</b> finish the prompt with one natural, grammatically complete sentence. Extra point for Module 1 vocabulary.</div>
+        <div class="miniRow"><button class="miniBtn" onclick="resetG1Timer()">↺ TIMER</button><button class="miniBtn" onclick="shuffleG1()">⤨ SHUFFLE</button></div>
+        <div class="keys"><kbd>Space</kbd><span>start timer</span><kbd>Enter</kbd><span>+1 point</span><kbd>N</kbd><span>next prompt</span><kbd>Esc</kbd><span>menu</span></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- GAME 2 -->
+  <section id="g2" class="screen" style="--accent:var(--pink)">
+    <div class="topbar">
+      <button class="back" onclick="goHome()">← MENU</button>
+      <div><span class="gameName">GUESS THE ENDING</span><span class="gameTag">Predict · reveal · compare</span></div>
+      <div class="spacer"></div>
+      <div class="scoreBox">SCORE <span id="g2Score" class="scoreNum">0</span></div>
+      <button class="iconBtn" onclick="toggleFull()">⛶</button>
+    </div>
+    <div class="gameBody">
+      <div class="stage">
+        <div id="g2Round" class="roundPill">ROUND 1 / 12</div>
+        <div class="splitSentence">
+          <div id="g2Lead" class="sentenceLead"></div>
+          <div class="clue">Predict the final phrase. Exact wording is not required.</div>
+          <div id="g2Ending" class="ending"></div>
+        </div>
+        <div class="footerControls">
+          <button id="g2RevealBtn" class="action primary" onclick="revealG2()">REVEAL ENDING</button>
+          <button class="action good" onclick="g2Correct()">✓ MATCH</button>
+          <button class="action secondary" onclick="nextG2()">NEXT →</button>
+        </div>
+        <div class="progressBar"><div id="g2Progress" class="progressFill"></div></div>
+      </div>
+      <aside class="side">
+        <h3>How to play</h3>
+        <div class="instructions">Student predicts a logical ending using Module 1 language. Reveal the model. Award a point for a correct idea or target phrase.</div>
+        <div style="border:1px solid var(--line);border-radius:18px;padding:14px;background:rgba(255,79,216,.06)"><b style="color:var(--pink)">Target:</b><br><span style="color:#d9deec">relationships · behaviour · dependent prepositions · phrasal verbs</span></div>
+        <div class="miniRow"><button class="miniBtn" onclick="revealG2()">👁 REVEAL</button><button class="miniBtn" onclick="shuffleG2()">⤨ SHUFFLE</button></div>
+        <div class="keys"><kbd>R</kbd><span>reveal ending</span><kbd>Enter</kbd><span>+1 point</span><kbd>N</kbd><span>next sentence</span><kbd>Esc</kbd><span>menu</span></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- GAME 3 -->
+  <section id="g3" class="screen" style="--accent:var(--orange)">
+    <div class="topbar">
+      <button class="back" onclick="goHome()">← MENU</button>
+      <div><span class="gameName">MISSING WORD AUDIO</span><span class="gameTag">No sentence on screen before reveal</span></div>
+      <div class="spacer"></div>
+      <div class="scoreBox">SCORE <span id="g3Score" class="scoreNum">0</span></div>
+      <button class="iconBtn" onclick="toggleFull()">⛶</button>
+    </div>
+    <div class="gameBody">
+      <div class="stage">
+        <div id="g3Round" class="roundPill">ROUND 1 / 12</div>
+        <div class="promptWrap" style="flex-direction:column">
+          <div class="audioOrb" onclick="playGapAudio()"><div class="speaker">◖))</div></div>
+          <div class="audioHint">Listen. One word or phrase is missing.</div>
+          <div id="g3Answer" class="answerCard"></div>
+        </div>
+        <div class="footerControls">
+          <button class="action primary" onclick="playGapAudio()">▶ LISTEN</button>
+          <button class="action bad" onclick="revealG3()">SHOW ANSWER</button>
+          <button class="action good" onclick="g3Correct()">✓ +1</button>
+          <button class="action secondary" onclick="nextG3()">NEXT →</button>
+        </div>
+        <div class="progressBar"><div id="g3Progress" class="progressFill"></div></div>
+      </div>
+      <aside class="side">
+        <h3>Audio mode</h3>
+        <div class="instructions">The browser reads the beginning, pauses at the missing item, then reads the rest. Questions stay hidden until you press <b>Show answer</b>.</div>
+        <button class="miniBtn" onclick="playFullAudio()">🔊 PLAY FULL SENTENCE</button>
+        <button class="miniBtn" onclick="shuffleG3()">⤨ SHUFFLE</button>
+        <div style="margin-top:4px;color:var(--muted);font-size:12px;line-height:1.4">Voice priority: en-GB. If the device has a British voice installed, it is selected automatically.</div>
+        <div class="keys"><kbd>Space</kbd><span>listen</span><kbd>R</kbd><span>show answer</span><kbd>Enter</kbd><span>+1 point</span><kbd>N</kbd><span>next audio</span></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- GAME 4 -->
+  <section id="g4" class="screen" style="--accent:var(--lime)">
+    <div class="topbar">
+      <button class="back" onclick="goHome()">← MENU</button>
+      <div><span class="gameName">60 SEC VOCABULARY RUSH</span><span class="gameTag">Module 1 active vocabulary</span></div>
+      <div class="spacer"></div>
+      <button class="iconBtn" onclick="toggleFull()">⛶</button>
+    </div>
+    <div class="gameBody rushBody">
+      <div class="stage rushStage">
+        <div class="rushHeader">
+          <div class="roundPill">CLICK A WORD AFTER A CORRECT TRANSLATION</div>
+          <div class="spacer"></div>
+          <div class="modeSwitch"><button id="enRu" class="active" onclick="setRushMode('en')">EN → RU</button><button id="ruEn" onclick="setRushMode('ru')">RU → EN</button></div>
+        </div>
+        <div id="wordGrid" class="wordGrid"></div>
+        <div class="finishOverlay" id="rushOverlay"><div class="finishCard"><div id="rushFinal" class="finalNum">0</div><h2>TIME!</h2><p>correct translations in 60 seconds</p><button class="action primary" onclick="resetRush()">PLAY AGAIN</button></div></div>
+      </div>
+      <aside class="side">
+        <h3>60-second round</h3>
+        <div class="timerRing" style="width:155px;height:155px">
+          <svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="51"></circle><circle id="g4Ring" class="progress" cx="60" cy="60" r="51"></circle></svg>
+          <div id="g4Time" class="timeText" style="font-size:42px">60</div>
+        </div>
+        <button id="rushStart" class="action primary" onclick="startRush()" style="width:100%">START 60 SEC</button>
+        <div class="bigScore" id="rushScore">0</div><div class="bigScoreLabel">correct</div>
+        <div class="miniRow"><button class="miniBtn" onclick="resetRush()">↺ RESET</button><button class="miniBtn" onclick="shuffleRush()">⤨ SHUFFLE</button></div>
+        <div class="instructions" style="font-size:13px">Includes family, relationships, behaviour, dependent prepositions and <b>come</b> phrasal verbs.</div>
+        <div class="keys"><kbd>Space</kbd><span>start / pause</span><kbd>Esc</kbd><span>menu</span></div>
+      </aside>
+    </div>
+  </section>
+
+  <div id="toast" class="toast"></div>
+</div>
+
+<script>
+const g1Prompts = [
+  "I get on best with people who ...",
+  "A really reliable friend would never ...",
+  "If someone keeps showing off, I usually ...",
+  "I really object to people who ...",
+  "A person I can always rely on is ...",
+  "When family members don't see eye to eye, they should ...",
+  "I would be pleased with myself if I ...",
+  "Parents sometimes tell teenagers off because ...",
+  "The best way to take care of a friendship is to ...",
+  "I find interfering people difficult because ...",
+  "A close-knit family usually ...",
+  "If I came across an old friend after ten years, I would ..."
+];
+
+const g2Items = [
+  ["We don't always see eye to eye, but ...", "we still have a really good relationship."],
+  ["You can rely on Maya because ...", "she always keeps her promises."],
+  ["My parents strongly object to ...", "people interfering in other people's lives."],
+  ["I came across an old photo and ...", "recognised my grandfather immediately."],
+  ["Why don't you come over tonight? ...", "We're having pizza."],
+  ["The class came up with ...", "a brilliant idea for the school event."],
+  ["He came down with ...", "the flu just before the trip."],
+  ["She came into ...", "a large inheritance from a relative."],
+  ["My sister hates it when I show off because ...", "she thinks it is embarrassing."],
+  ["Even when we argue, I know I can ...", "depend on my family for support."],
+  ["A good friend should take care of you when ...", "you are having a difficult time."],
+  ["Although they have different personalities, ...", "they are very close to each other."]
+];
+
+const g3Items = [
+  {pre:"I can always", gap:"rely on", post:"my best friend when I have a problem."},
+  {pre:"My parents don't", gap:"approve of", post:"rude behaviour."},
+  {pre:"We", gap:"came across", post:"an old family photograph at the market."},
+  {pre:"Why don't you", gap:"come over", post:"after school?"},
+  {pre:"The students", gap:"came up with", post:"a creative solution."},
+  {pre:"He", gap:"came down with", post:"the flu at the weekend."},
+  {pre:"She", gap:"came into", post:"a large inheritance last year."},
+  {pre:"My brother is always", gap:"showing off", post:"in front of his friends."},
+  {pre:"I strongly", gap:"object to", post:"people reading my private messages."},
+  {pre:"They don't always", gap:"see eye to eye", post:"on family rules."},
+  {pre:"Please", gap:"take care of", post:"your little sister this afternoon."},
+  {pre:"The teacher", gap:"told him off", post:"for his poor behaviour."}
+];
+
+const rushWords = [
+  ["brother-in-law","зять / шурин"],["divorced","разведённый"],["elderly","пожилой"],["engaged","помолвленный"],["ex-husband","бывший муж"],
+  ["grandson","внук"],["great-grandfather","прадедушка"],["half-sister","сводная сестра"],["in-laws","родственники супруга"],["mother-in-law","тёща / свекровь"],
+  ["nephew","племянник"],["niece","племянница"],["separated","живущие раздельно"],["single-parent family","неполная семья"],["stepfather","отчим"],
+  ["stepmother","мачеха"],["twin brother","брат-близнец"],["relationship","отношения"],["support","поддерживать"],["interfere","вмешиваться"],
+  ["approve of","одобрять"],["depend on","зависеть от"],["object to","возражать против"],["rely on","полагаться на"],["show off","хвастаться"],
+  ["take care of","заботиться о"],["tell off","отчитывать"],["come across","случайно натолкнуться"],["come over","зайти в гости"],["come up with","придумать"],
+  ["come down with","заболеть"],["come into","получить в наследство"],["pleased with","довольный"],["priority","приоритет"],["honour","честь"]
+];
+
+let activeGame='start';
+let scores={g1:0,g2:0,g3:0};
+let g1Index=0,g2Index=0,g3Index=0;
+let g1Timer=null,g1Time=20;
+let rushTimer=null,rushTime=60,rushRunning=false,rushMode='en';
+const CIRC=2*Math.PI*51;
+
+function initRing(id){ const c=document.getElementById(id); c.style.strokeDasharray=CIRC; c.style.strokeDashoffset=0; }
+initRing('g1Ring'); initRing('g4Ring');
+
+function openGame(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active'); activeGame=id;
+  if(id==='g1') renderG1(); if(id==='g2') renderG2(); if(id==='g3') renderG3(); if(id==='g4') renderRush();
+}
+function goHome(){
+  clearInterval(g1Timer); clearInterval(rushTimer); speechSynthesis.cancel(); rushRunning=false;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('start').classList.add('active');activeGame='start';
+}
+function toggleFull(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); }
+function toast(msg){ const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),900); }
+function beep(freq=560,dur=.10){try{const a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.frequency.value=freq;o.type='sine';o.connect(g);g.connect(a.destination);g.gain.setValueAtTime(.001,a.currentTime);g.gain.exponentialRampToValueAtTime(.18,a.currentTime+.01);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+dur);o.start();o.stop(a.currentTime+dur+.02);}catch(e){}}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+// GAME 1
+function renderG1(){
+  document.getElementById('g1Prompt').innerHTML=g1Prompts[g1Index].replace('...','<span class="gap">...</span>');
+  document.getElementById('g1Round').textContent=`ROUND ${g1Index+1} / ${g1Prompts.length}`;
+  document.getElementById('g1Progress').style.width=`${((g1Index+1)/g1Prompts.length)*100}%`;
+  resetG1Timer(false);
+}
+function startG1Timer(){
+  if(g1Timer)return; if(g1Time<=0)g1Time=20; beep(690,.08);
+  g1Timer=setInterval(()=>{g1Time--;updateG1Ring();if(g1Time<=0){clearInterval(g1Timer);g1Timer=null;beep(170,.42);document.getElementById('g1Start').textContent='TIME!';}},1000);
+  document.getElementById('g1Start').textContent='RUNNING…';
+}
+function updateG1Ring(){document.getElementById('g1Time').textContent=g1Time;document.getElementById('g1Ring').style.strokeDashoffset=CIRC*(1-g1Time/20)}
+function resetG1Timer(sound=true){clearInterval(g1Timer);g1Timer=null;g1Time=20;updateG1Ring();document.getElementById('g1Start').textContent='START 20 SEC';if(sound)beep(420,.06)}
+function g1Correct(){scores.g1++;document.getElementById('g1Score').textContent=scores.g1;beep(850,.08);toast('+1 POINT');}
+function nextG1(){g1Index=(g1Index+1)%g1Prompts.length;renderG1();}
+function shuffleG1(){shuffle(g1Prompts);g1Index=0;renderG1();toast('SHUFFLED');}
+
+// GAME 2
+function renderG2(){document.getElementById('g2Lead').textContent=g2Items[g2Index][0];const e=document.getElementById('g2Ending');e.textContent=g2Items[g2Index][1];e.classList.remove('visible');document.getElementById('g2RevealBtn').textContent='REVEAL ENDING';document.getElementById('g2Round').textContent=`ROUND ${g2Index+1} / ${g2Items.length}`;document.getElementById('g2Progress').style.width=`${((g2Index+1)/g2Items.length)*100}%`;}
+function revealG2(){document.getElementById('g2Ending').classList.add('visible');document.getElementById('g2RevealBtn').textContent='REVEALED';beep(620,.08)}
+function g2Correct(){scores.g2++;document.getElementById('g2Score').textContent=scores.g2;beep(850,.08);toast('+1 MATCH');}
+function nextG2(){g2Index=(g2Index+1)%g2Items.length;renderG2();}
+function shuffleG2(){shuffle(g2Items);g2Index=0;renderG2();toast('SHUFFLED');}
+
+// SPEECH
+let voices=[];function loadVoices(){voices=speechSynthesis.getVoices()}loadVoices();speechSynthesis.onvoiceschanged=loadVoices;
+function britishVoice(){return voices.find(v=>/en-GB/i.test(v.lang)&&/male|daniel|george|ryan|oliver|arthur/i.test(v.name))||voices.find(v=>/en-GB/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));}
+function speak(text,rate=.92){return new Promise(resolve=>{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=rate;u.pitch=.96;const v=britishVoice();if(v)u.voice=v;u.onend=resolve;u.onerror=resolve;speechSynthesis.speak(u);});}
+function speakNoCancel(text,rate=.92){return new Promise(resolve=>{const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=rate;u.pitch=.96;const v=britishVoice();if(v)u.voice=v;u.onend=resolve;u.onerror=resolve;speechSynthesis.speak(u);});}
+function wait(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// GAME 3
+function renderG3(){speechSynthesis.cancel();document.getElementById('g3Answer').classList.remove('visible');document.getElementById('g3Answer').textContent=g3Items[g3Index].gap;document.getElementById('g3Round').textContent=`ROUND ${g3Index+1} / ${g3Items.length}`;document.getElementById('g3Progress').style.width=`${((g3Index+1)/g3Items.length)*100}%`;}
+async function playGapAudio(){const x=g3Items[g3Index];speechSynthesis.cancel();await speakNoCancel(x.pre,.88);await wait(850);beep(470,.14);await wait(520);await speakNoCancel(x.post,.88);}
+function revealG3(){document.getElementById('g3Answer').classList.add('visible');beep(620,.08)}
+function playFullAudio(){const x=g3Items[g3Index];speak(`${x.pre} ${x.gap} ${x.post}`,.88)}
+function g3Correct(){scores.g3++;document.getElementById('g3Score').textContent=scores.g3;beep(850,.08);toast('+1 POINT');}
+function nextG3(){g3Index=(g3Index+1)%g3Items.length;renderG3();}
+function shuffleG3(){shuffle(g3Items);g3Index=0;renderG3();toast('SHUFFLED');}
+
+// GAME 4
+function renderRush(){const grid=document.getElementById('wordGrid');grid.innerHTML='';rushWords.forEach((pair,i)=>{const b=document.createElement('button');b.className='wordTile';b.dataset.i=i;b.innerHTML=`<span class="main">${rushMode==='en'?pair[0]:pair[1]}</span><span class="translation">${rushMode==='en'?pair[1]:pair[0]}</span>`;b.onclick=()=>markRush(b);grid.appendChild(b);});updateRushScore();}
+function markRush(el){if(el.classList.contains('done')){el.classList.remove('done')}else{el.classList.add('done');beep(830,.055)}updateRushScore();}
+function updateRushScore(){const n=document.querySelectorAll('#wordGrid .done').length;document.getElementById('rushScore').textContent=n;}
+function setRushMode(mode){rushMode=mode;document.getElementById('enRu').classList.toggle('active',mode==='en');document.getElementById('ruEn').classList.toggle('active',mode==='ru');renderRush();}
+function startRush(){if(rushRunning){clearInterval(rushTimer);rushTimer=null;rushRunning=false;document.getElementById('rushStart').textContent='RESUME';return;}if(rushTime<=0)return;rushRunning=true;document.getElementById('rushStart').textContent='PAUSE';beep(690,.08);rushTimer=setInterval(()=>{rushTime--;updateRushRing();if(rushTime<=0){clearInterval(rushTimer);rushTimer=null;rushRunning=false;beep(170,.5);const n=document.querySelectorAll('#wordGrid .done').length;document.getElementById('rushFinal').textContent=n;document.getElementById('rushOverlay').classList.add('show');}},1000)}
+function updateRushRing(){document.getElementById('g4Time').textContent=rushTime;document.getElementById('g4Ring').style.strokeDashoffset=CIRC*(1-rushTime/60)}
+function resetRush(){clearInterval(rushTimer);rushTimer=null;rushRunning=false;rushTime=60;document.getElementById('rushOverlay').classList.remove('show');document.getElementById('rushStart').textContent='START 60 SEC';document.querySelectorAll('#wordGrid .done').forEach(x=>x.classList.remove('done'));updateRushScore();updateRushRing();}
+function shuffleRush(){shuffle(rushWords);resetRush();renderRush();toast('SHUFFLED');}
+
+window.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&activeGame!=='start'){goHome();return}
+  if(activeGame==='g1'){if(e.code==='Space'){e.preventDefault();startG1Timer()}if(e.key==='Enter')g1Correct();if(e.key.toLowerCase()==='n')nextG1()}
+  if(activeGame==='g2'){if(e.key.toLowerCase()==='r')revealG2();if(e.key==='Enter')g2Correct();if(e.key.toLowerCase()==='n')nextG2()}
+  if(activeGame==='g3'){if(e.code==='Space'){e.preventDefault();playGapAudio()}if(e.key.toLowerCase()==='r')revealG3();if(e.key==='Enter')g3Correct();if(e.key.toLowerCase()==='n')nextG3()}
+  if(activeGame==='g4'&&e.code==='Space'){e.preventDefault();startRush()}
+});
+
+renderG1();renderG2();renderG3();renderRush();updateG1Ring();updateRushRing();
+</script>
+</body>
+</html>
