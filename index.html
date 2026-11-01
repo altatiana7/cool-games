@@ -8,134 +8,181 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=PT+Sans:wght@400;700&display=swap">
 <style>
 :root{
-  --bg:#f6f3ec;--card:#fffdf8;--ink:#1f2433;--mute:#5d6377;--line:#e3ddcf;
-  --speak:#0e8f8a;--vocab:#2f9a4a;--gram:#e0701a;--write:#2f62d6;--exam:#b8327e;--exam2:#c0392b;
+  --bg:#f3f6fb;--card:#fff;--ink:#1d2a3a;--mute:#5d6b80;--line:#e1e7f0;--teal:#14a38b;
+  --spot:#d64545;--speak:#e0a100;--listen:#0fa3a3;--gram:#3b6fe0;--vocab:#8b4fe0;--write:#e0701a;--exam:#c2367f;
   --serif:"PT Serif",Georgia,"Times New Roman",serif;--sans:"PT Sans","Segoe UI",Arial,sans-serif;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1d27;--card:#242836;--ink:#eef0f6;--mute:#a8aec2;--line:#363b4d}}
-:root[data-theme="dark"]{--bg:#1a1d27;--card:#242836;--ink:#eef0f6;--mute:#a8aec2;--line:#363b4d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151b26;--card:#1f2734;--ink:#eef2f8;--mute:#a7b2c4;--line:#323c4d}}
+:root[data-theme="dark"]{--bg:#151b26;--card:#1f2734;--ink:#eef2f8;--mute:#a7b2c4;--line:#323c4d}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.4 var(--sans)}
-main{max-width:1240px;margin:0 auto;padding:10px 16px 24px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 var(--sans)}
+button,select,input{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
 
-/* compact top bar */
-.top{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;padding:9px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:14px}
-h1{margin:0;font:700 26px/1 var(--serif);white-space:nowrap}
-h1 span{color:var(--gram)}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;flex:1}
-.tab{border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:99px;padding:6px 13px;font:700 14px var(--sans);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-.tab i{width:9px;height:9px;border-radius:50%;background:var(--c,var(--ink))}
-.tab em{font-style:normal;opacity:.65;font-weight:400}
-.tab[aria-pressed="true"]{background:var(--c,var(--ink));border-color:var(--c,var(--ink));color:#fff}
-.tab[aria-pressed="true"] i{background:#fff}
-input{width:180px;max-width:100%;padding:8px 14px;border:1.5px solid var(--line);border-radius:99px;background:var(--bg);color:var(--ink);font:15px var(--sans)}
+/* 1. header */
+header{background:var(--card);border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(20,40,80,.06)}
+.hd{display:flex;align-items:center;gap:20px;height:56px}
+.logo{display:flex;align-items:center;gap:8px;font:700 21px var(--serif);color:var(--ink);cursor:pointer;background:none;border:0;padding:0}
+.logo svg{width:28px;height:28px}
+.logo span{color:var(--teal)}
+nav{display:flex;gap:22px;margin:0 auto}
+nav button{background:none;border:0;cursor:pointer;font-weight:700;color:var(--ink);padding:6px 0;border-bottom:2px solid transparent}
+nav button.on{color:var(--teal);border-color:var(--teal)}
+.count-top{color:var(--mute);font-size:14px;white-space:nowrap}
 
-/* game cards with picture */
-.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
-a.g{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-bottom:5px solid var(--c);border-radius:14px;overflow:hidden;transition:transform .14s,box-shadow .14s}
-a.g:hover,a.g:focus-visible{transform:translateY(-4px);box-shadow:0 10px 24px color-mix(in srgb,var(--c) 30%,transparent);outline:none}
-.pic{position:relative;aspect-ratio:16/10;background:color-mix(in srgb,var(--c) 15%,var(--card));border-bottom:1px solid var(--line)}
+/* 2. category bar */
+.cats{background:color-mix(in srgb,var(--bg) 60%,var(--card));border-bottom:1px solid var(--line)}
+.cb{display:flex;gap:6px;overflow-x:auto;padding:6px 16px;scrollbar-width:thin;justify-content:space-between}
+.cat{display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:10px;border:0;background:none;cursor:pointer;font-weight:700;white-space:nowrap;color:var(--ink)}
+.cat svg{width:19px;height:19px;stroke:var(--c);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cat:hover{background:color-mix(in srgb,var(--c) 10%,transparent)}
+.cat.on{background:var(--c);color:#fff}.cat.on svg{stroke:#fff}
+
+/* 3. hero */
+.hero{background:linear-gradient(110deg,#17b29a 0%,#2a7be4 55%,#2856d8 100%);color:#fff;text-align:center;padding:22px 16px 24px}
+.hero h1{margin:0;font:700 34px/1.1 var(--serif)}
+.hero p{margin:6px 0 14px;opacity:.92}
+.search{max-width:640px;margin:0 auto;position:relative}
+.search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;stroke:var(--teal);fill:none;stroke-width:2.2}
+.search input{width:100%;border:0;border-radius:12px;padding:13px 16px 13px 46px;background:#fff;color:#1d2a3a;box-shadow:0 8px 24px rgba(10,30,80,.25)}
+
+/* 4. filters */
+.filters{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin:16px 0 14px;box-shadow:0 2px 10px rgba(20,40,80,.05)}
+select{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--card);cursor:pointer}
+.show{margin-left:auto;color:var(--mute)}.show b{color:var(--teal)}
+.reset{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--card);cursor:pointer}
+
+/* 5. sections + cards */
+.sec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px 16px;margin-bottom:16px}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sh .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--c)}
+.sh .ic svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sh h2{margin:0;font:700 21px var(--serif)}
+.sh small{color:var(--mute);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+a.g{display:flex;flex-direction:column;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);transition:transform .14s,box-shadow .14s}
+a.g:hover,a.g:focus-visible{transform:translateY(-3px);box-shadow:0 10px 22px rgba(20,40,80,.14);outline:none}
+.pic{position:relative;aspect-ratio:16/10;background:var(--bg)}
 .pic img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
-.chip{position:absolute;left:8px;top:8px;background:var(--c);color:#fff;font:700 12px var(--sans);letter-spacing:.3px;border-radius:99px;padding:2px 10px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
-.body{padding:9px 11px 11px;display:flex;flex-direction:column;gap:4px;flex:1}
-.t{font:700 16px/1.22 var(--serif)}
-.d{color:var(--mute);font-size:13.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.new{position:absolute;right:7px;top:7px;background:#ffb020;color:#2b1d00;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px}
+.lvl{position:absolute;left:7px;bottom:7px;background:rgba(20,30,50,.82);color:#fff;font-size:11.5px;font-weight:700;border-radius:6px;padding:1px 7px}
+.body{padding:8px 10px 10px;display:flex;flex-direction:column;gap:4px;flex:1}
+.t{font:700 15.5px/1.22 var(--serif)}
+.d{color:var(--mute);font-size:13px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:3px}
-.tags span{font-size:11.5px;font-weight:700;color:var(--c);border:1px solid color-mix(in srgb,var(--c) 45%,transparent);border-radius:99px;padding:0 7px}
-.groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-button.grp{all:unset;cursor:pointer;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-top:7px solid var(--c);border-radius:16px;overflow:hidden;transition:transform .14s,box-shadow .14s}
-button.grp:hover,button.grp:focus-visible{transform:translateY(-4px);box-shadow:0 12px 26px color-mix(in srgb,var(--c) 32%,transparent)}
-.mosaic{display:grid;gap:3px;aspect-ratio:16/7;overflow:hidden;grid-template-rows:minmax(0,1fr);background:color-mix(in srgb,var(--c) 25%,var(--card))}
-.mosaic.m1{grid-template-columns:1fr}.mosaic.m2{grid-template-columns:1fr 1fr}.mosaic.m3{grid-template-columns:2fr 1fr;grid-template-rows:repeat(2,minmax(0,1fr))}
-.mosaic.m3 img:first-child{grid-row:span 2}
-.mosaic img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;min-height:0}
-.gb{padding:8px 14px 10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.gb h2{margin:0;font:700 22px var(--serif);color:var(--c)}
-.gb b{margin-left:auto;background:var(--c);color:#fff;border-radius:99px;padding:1px 10px;font-size:14px}
-.gb p{margin:0;width:100%;color:var(--mute);font-size:14px}
-.back{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:99px;padding:6px 14px;font:700 14px var(--sans);cursor:pointer}
-.sect{display:flex;align-items:baseline;gap:10px;margin:0 0 12px}
-.sect h2{margin:0;font:700 24px var(--serif);color:var(--c)}
-.sect p{margin:0;color:var(--mute);font-size:15px}
-@media (max-width:860px){.groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){.groups{grid-template-columns:1fr}}
-.none{display:none;color:var(--mute);text-align:center;padding:30px}
+.tags span{font-size:11.5px;font-weight:700;color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent);border-radius:6px;padding:1px 7px}
+.none{display:none;color:var(--mute);text-align:center;padding:24px}
+footer{color:var(--mute);font-size:13px;text-align:center;padding:4px 0 22px}
 @media (max-width:1100px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media (max-width:860px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:640px){.top{padding:10px}h1{font-size:22px}input{width:100%}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
-@media (max-width:400px){.grid{grid-template-columns:1fr}}
+@media (max-width:860px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}nav{display:none}.cb{justify-content:flex-start}}
+@media (max-width:600px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hero h1{font-size:26px}.show{margin-left:0;width:100%}.count-top{display:none}}
 </style>
 </head>
 <body>
-<main>
-<div class="top">
-  <h1>Cool <span>games</span></h1>
-  <div class="tabs" id="tabs"></div>
-  <input id="q" type="search" placeholder="Поиск игры" aria-label="Поиск" autocomplete="off">
-</div>
-<div id="view"></div>
-<p class="none" id="no">Ничего не найдено.</p>
+<header><div class="wrap hd">
+  <button class="logo" id="logo" aria-label="Cool games — главная">
+    <svg viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="8" fill="#14a38b"/><path d="M10 12h12M10 16h8M10 20h12" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>
+    Cool <span>games</span></button>
+  <nav><button id="navHome" class="on">Home</button><button id="navAll">Activities</button></nav>
+  <span class="count-top" id="countTop"></span>
+</div></header>
+
+<div class="cats"><div class="wrap cb" id="cats"></div></div>
+
+<section class="hero">
+  <h1>Cool games</h1>
+  <p id="heroSub"></p>
+  <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    <input id="q" type="search" placeholder="Поиск: тема, уровень, грамматика, учебник…" aria-label="Поиск" autocomplete="off"></div>
+</section>
+
+<main class="wrap">
+  <div class="filters">
+    <select id="fCat" aria-label="Категория"></select>
+    <select id="fLvl" aria-label="Уровень"><option value="">All Levels</option><option>A1–A2</option><option>B1</option><option>B2</option><option>C1</option></select>
+    <select id="fSort" aria-label="Сортировка"><option value="new">Newest First</option><option value="old">Oldest First</option><option value="az">A–Z</option></select>
+    <button class="reset" id="reset">Сбросить</button>
+    <span class="show">Showing <b id="shown">0</b> activities</span>
+  </div>
+  <div id="view"></div>
+  <p class="none" id="no">Ничего не найдено.</p>
 </main>
+<footer>Cool games · игры и тренажёры по английскому</footer>
+
 <script>
-/* Activities in display order; each game: [title, description, file name in games/, tags] */
-var A=[
-{n:"Spotlight",d:"Игры по модулям учебников Spotlight",c:"--exam2",i:[
- ["Spotlight 10 · Module 1: Word Walls","Teen life, Character, Appearance: собери стену, потом тест","word-walls-spotlight10",["Spotlight 10","Vocabulary"]],
- ["Spotlight 11 · Module 1: Speed Game","Relationships: 20 sec finish, guess the ending, missing word, 60 sec rush","spotlight11-speed-game",["Spotlight 11","Speaking"]]]},
-{n:"Speaking",d:"Ответы вслух и вопросы на слух",c:"--speak",i:[
- ["Ten Faces, Ten Questions","10 человек задают вопросы вслух: 5 тем и ревижн Unit 1, Redo, лист для печати","ten-faces",["интервью","на слух"]]]},
-{n:"Grammar",d:"Времена и формы глагола",c:"--gram",i:[
- ["Funny Travel Stories: Past Simple","8 историй путешественников с аудио, карточки, бонус-раунд","funny-travel-stories",["Past Simple","аудио"]],
- ["60 Common Verbs: Sentence Builder","60 глаголов с фото: форма + время, Mixed Review, лист для печати","sixty-verbs",["фото","времена"]],
- ["Rewrite: Present Simple vs Continuous","Перепишите предложения","rewrite-tenses",["Present tenses"]]]},
-{n:"Vocabulary",d:"Слова, фразы и словообразование",c:"--vocab",i:[
- ["Word Walls","Стены со словами: собери стену, потом тест","word-walls",["стена слов"]],
- ["Word Formation: Team Challenge","Словообразование: 4 уровня A2–C1, 100 заданий, командами с таймером","word-formation",["A2–C1","jeopardy"]]]},
-{n:"Writing",d:"Ответы на сообщения и полезные фразы",c:"--write",i:[
- ["Chat Reply: Across Generations","10 чатов, карточки с озвучкой, игра «Who is replying?»","chat-reply",["чаты","стиль"]]]},
-{n:"ЕГЭ",d:"Подготовка к экзамену в формате ФИПИ",c:"--exam",i:[
- ["Тренажёр «Travelling»","Задания в формате ФИПИ","ege-travelling",["ФИПИ"]]]}
+/* Categories: key, label, colour token, icon path(s) */
+var C=[
+ ["spot","Spotlight","--spot",'<path d="M4 19V5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2zm0 0a2 2 0 0 1 2-2h12"/>'],
+ ["speak","Speaking","--speak",'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12z"/>'],
+ ["listen","Listening","--listen",'<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>'],
+ ["gram","Grammar","--gram",'<path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2zM22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/>'],
+ ["vocab","Vocabulary","--vocab",'<path d="M5 6V4h14v2M12 4v16M9 20h6"/>'],
+ ["write","Writing","--write",'<path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4"/>'],
+ ["exam","ЕГЭ","--exam",'<path d="M9 4h6v3H9zM7 5H5v16h14V5h-2"/><path d="M9 13l2 2 4-4"/>']
 ];
-var cur="",q="";
+var NEWI='<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>';
+var GRIDI='<path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/>';
+/* Games: title, description, file (games/<file>.html, games/thumbs/<file>.jpg), categories, level, date added, extra tags */
+var G=[
+ ["Funny Travel Stories: Past Simple","8 историй путешественников с аудио, карточки, бонус-раунд «Who told this story?»","funny-travel-stories",["gram","listen"],"A1–A2","2026-11-01",["Past Simple"]],
+ ["Spotlight 11 · Module 1: Speed Game","Relationships: 20 sec finish, guess the ending, missing word, 60 sec rush","spotlight11-speed-game",["spot","speak","vocab"],"B2","2026-10-18",["Spotlight 11"]],
+ ["Spotlight 10 · Module 1: Word Walls","Teen life, Character, Appearance: собери стену, потом тест","word-walls-spotlight10",["spot","vocab"],"B1","2026-10-18",["Spotlight 10"]],
+ ["Word Formation: Team Challenge","Словообразование: 4 уровня A2–C1, 100 заданий, командами с таймером","word-formation",["vocab","exam"],"B2","2026-10-18",["A2–C1","jeopardy"]],
+ ["Ten Faces, Ten Questions","10 человек задают вопросы вслух: 5 тем и ревижн Unit 1, Redo, лист для печати","ten-faces",["speak","listen"],"B1","2026-10-06",["интервью"]],
+ ["Chat Reply: Across Generations","10 чатов, карточки с озвучкой, игра «Who is replying?»","chat-reply",["write"],"B1","2026-10-06",["чаты"]],
+ ["Word Walls","Стены со словами: собери стену, потом тест","word-walls",["vocab"],"B1","2026-10-06",["стена слов"]],
+ ["60 Common Verbs: Sentence Builder","60 глаголов с фото: форма + время, Mixed Review, лист для печати","sixty-verbs",["gram"],"A1–A2","2026-10-06",["времена"]],
+ ["Rewrite: Present Simple vs Continuous","Перепишите предложения","rewrite-tenses",["gram"],"A1–A2","2026-10-06",["Present tenses"]],
+ ["Тренажёр «Travelling»","Задания в формате ФИПИ","ege-travelling",["exam"],"B2","2026-10-06",["ФИПИ"]]
+];
+var CAT={};C.forEach(function(c){CAT[c[0]]=c});
+var NEWEST=G.map(function(g){return g[5]}).sort().slice(-1)[0];
+var $=function(id){return document.getElementById(id)};
 function esc(s){return s.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
-function tabs(){
-  var h='<button class="tab" data-n="" aria-pressed="'+(cur==="")+'">Все</button>';
-  A.forEach(function(a){h+='<button class="tab" style="--c:var('+a.c+')" data-n="'+esc(a.n)+'" aria-pressed="'+(cur===a.n)+'"><i></i>'+esc(a.n)+' <em>'+a.i.length+'</em></button>'});
-  var t=document.getElementById("tabs");t.innerHTML=h;
-  t.querySelectorAll(".tab").forEach(function(b){b.onclick=function(){open(b.dataset.n)}});
-}
-function card(a,x){
-  return '<a class="g" style="--c:var('+a.c+')" href="games/'+x[2]+'.html">'+
-    '<div class="pic"><img src="games/thumbs/'+x[2]+'.jpg" alt="" loading="lazy"><span class="chip">'+esc(a.n)+'</span></div>'+
-    '<div class="body"><div class="t">'+esc(x[0])+'</div><div class="d">'+esc(x[1])+'</div>'+
-    '<div class="tags">'+x[3].map(function(t){return '<span>'+esc(t)+'</span>'}).join("")+'</div></div></a>';
-}
+function ico(p){return '<svg viewBox="0 0 24 24">'+p+'</svg>'}
+var st;
+function card(g){
+  return '<a class="g" href="games/'+g[2]+'.html"><div class="pic"><img src="games/thumbs/'+g[2]+'.jpg" alt="" loading="lazy">'+
+   (g[5]===NEWEST?'<span class="new">NEW</span>':'')+'<span class="lvl">'+g[4]+'</span></div>'+
+   '<div class="body"><div class="t">'+esc(g[0])+'</div><div class="d">'+esc(g[1])+'</div><div class="tags">'+
+   g[3].map(function(k){return '<span style="--c:var('+CAT[k][2]+')">'+CAT[k][1]+'</span>'}).join("")+
+   g[6].map(function(t){return '<span style="--c:var(--mute)">'+esc(t)+'</span>'}).join("")+'</div></div></a>';}
+function section(icon,color,title,sub,list){
+  return '<section class="sec"><div class="sh"><span class="ic" style="--c:'+color+'">'+ico(icon)+'</span><h2>'+esc(title)+'</h2><small>'+esc(sub)+'</small></div><div class="grid">'+list.map(card).join("")+'</div></section>';}
 function draw(){
-  var v=document.getElementById("view"),h="",n=0;
-  if(q){ /* search across all sections */
-    A.forEach(function(a){a.i.forEach(function(x){if((x[0]+" "+x[1]+" "+x[3].join(" ")).toLowerCase().indexOf(q)>-1){n++;h+=card(a,x)}})});
-    v.innerHTML='<div class="grid">'+h+'</div>';
-  }else if(!cur){ /* home: one button per section */
-    A.forEach(function(a){n++;var k=Math.min(a.i.length,3);
-      h+='<button class="grp" style="--c:var('+a.c+')" data-n="'+esc(a.n)+'"><div class="mosaic m'+k+'">'+
-        a.i.slice(0,3).map(function(x){return '<img src="games/thumbs/'+x[2]+'.jpg" alt="">'}).join("")+
-        '</div><div class="gb"><h2>'+esc(a.n)+'</h2><b>'+a.i.length+'</b><p>'+esc(a.d)+'</p></div></button>'});
-    v.innerHTML='<div class="groups">'+h+'</div>';
-    v.querySelectorAll(".grp").forEach(function(b){b.onclick=function(){open(b.dataset.n)}});
-  }else{ /* one section */
-    var a=A.filter(function(x){return x.n===cur})[0];
-    a.i.forEach(function(x){n++;h+=card(a,x)});
-    v.innerHTML='<div class="sect" style="--c:var('+a.c+')"><button class="back" id="bk">← Все разделы</button><h2>'+esc(a.n)+'</h2><p>'+esc(a.d)+'</p></div><div class="grid">'+h+'</div>';
-    document.getElementById("bk").onclick=function(){open("")};
+  $("cats").innerHTML=C.map(function(c){return '<button class="cat'+(st.cat===c[0]?' on':'')+'" style="--c:var('+c[2]+')" data-k="'+c[0]+'">'+ico(c[3])+c[1]+'</button>'}).join("");
+  $("cats").querySelectorAll(".cat").forEach(function(b){b.onclick=function(){st.cat=st.cat===b.dataset.k?"":b.dataset.k;st.all=true;draw()}});
+  $("navHome").classList.toggle("on",!st.all);$("navAll").classList.toggle("on",st.all);
+  $("fCat").value=st.cat;$("fLvl").value=st.lvl;$("fSort").value=st.sort;
+  var list=G.filter(function(g){
+    return (!st.cat||g[3].indexOf(st.cat)>-1)&&(!st.lvl||g[4]===st.lvl)&&
+      (!st.q||(g[0]+" "+g[1]+" "+g[4]+" "+g[6].join(" ")+" "+g[3].map(function(k){return CAT[k][1]}).join(" ")).toLowerCase().indexOf(st.q)>-1)});
+  list.sort(st.sort==="az"?function(a,b){return a[0].localeCompare(b[0])}:st.sort==="old"?function(a,b){return a[5]<b[5]?-1:a[5]>b[5]?1:0}:function(a,b){return a[5]<b[5]?1:a[5]>b[5]?-1:0});
+  $("shown").textContent=list.length;
+  var h="";
+  if(!st.all&&!st.cat&&!st.lvl&&!st.q){
+    h+=section(NEWI,"#f2a20c","What's New","последние добавленные",list.slice(0,5));
+    h+=section(GRIDI,"var(--teal)","All Activities","остальные игры и тренажёры",list.slice(5));
+  }else if(list.length){
+    var c=st.cat?CAT[st.cat]:null;
+    h+=section(c?c[3]:GRIDI,c?"var("+c[2]+")":"var(--teal)",c?c[1]:"Activities",st.lvl?"уровень "+st.lvl:"все уровни",list);
   }
-  document.getElementById("no").style.display=n?"none":"block";
+  $("view").innerHTML=h;$("no").style.display=list.length?"none":"block";
 }
-function open(n){cur=n;q="";document.getElementById("q").value="";tabs();draw();window.scrollTo(0,0)}
-document.getElementById("q").oninput=function(){q=this.value.trim().toLowerCase();draw()};
-/* Always open at the very top, on the section buttons, with an empty search. */
+$("fCat").innerHTML='<option value="">All Categories</option>'+C.map(function(c){return '<option value="'+c[0]+'">'+c[1]+'</option>'}).join("");
+$("countTop").textContent=G.length+" activities";
+$("heroSub").textContent=G.length+" интерактивных игр и тренажёров по английскому";
+$("fCat").onchange=function(){st.cat=this.value;st.all=true;draw()};
+$("fLvl").onchange=function(){st.lvl=this.value;st.all=true;draw()};
+$("fSort").onchange=function(){st.sort=this.value;st.all=true;draw()};
+$("q").oninput=function(){st.q=this.value.trim().toLowerCase();draw()};
+$("navAll").onclick=function(){st.all=true;draw()};
+$("navHome").onclick=$("logo").onclick=$("reset").onclick=fresh;
+/* Always open at the very top with nothing selected. */
 if("scrollRestoration" in history)history.scrollRestoration="manual";
-window.addEventListener("pageshow",function(){open("")});
-open("");
+function fresh(){st={cat:"",lvl:"",sort:"new",q:"",all:false};$("q").value="";draw();window.scrollTo(0,0)}
+window.addEventListener("pageshow",fresh);
+fresh();
 </script>
 </body>
 </html>
