@@ -9,7 +9,7 @@
 <style>
 :root{
   --bg:#f6f3ec;--card:#fffdf8;--ink:#1f2433;--mute:#5d6377;--line:#e3ddcf;
-  --speak:#0e8f8a;--vocab:#2f9a4a;--gram:#e0701a;--write:#2f62d6;--exam:#b8327e;
+  --speak:#0e8f8a;--vocab:#2f9a4a;--gram:#e0701a;--write:#2f62d6;--exam:#b8327e;--exam2:#c0392b;
   --serif:"PT Serif",Georgia,"Times New Roman",serif;--sans:"PT Sans","Segoe UI",Arial,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1d27;--card:#242836;--ink:#eef0f6;--mute:#a8aec2;--line:#363b4d}}
@@ -28,7 +28,7 @@ h1 span{color:var(--gram)}
 .tab em{font-style:normal;opacity:.65;font-weight:400}
 .tab[aria-pressed="true"]{background:var(--c,var(--ink));border-color:var(--c,var(--ink));color:#fff}
 .tab[aria-pressed="true"] i{background:#fff}
-input{width:200px;max-width:100%;padding:8px 14px;border:1.5px solid var(--line);border-radius:99px;background:var(--bg);color:var(--ink);font:15px var(--sans)}
+input{width:180px;max-width:100%;padding:8px 14px;border:1.5px solid var(--line);border-radius:99px;background:var(--bg);color:var(--ink);font:15px var(--sans)}
 
 /* game cards with picture */
 .grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
@@ -42,6 +42,23 @@ a.g:hover,a.g:focus-visible{transform:translateY(-4px);box-shadow:0 10px 24px co
 .d{color:var(--mute);font-size:13.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:3px}
 .tags span{font-size:11.5px;font-weight:700;color:var(--c);border:1px solid color-mix(in srgb,var(--c) 45%,transparent);border-radius:99px;padding:0 7px}
+.groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+button.grp{all:unset;cursor:pointer;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-top:7px solid var(--c);border-radius:16px;overflow:hidden;transition:transform .14s,box-shadow .14s}
+button.grp:hover,button.grp:focus-visible{transform:translateY(-4px);box-shadow:0 12px 26px color-mix(in srgb,var(--c) 32%,transparent)}
+.mosaic{display:grid;gap:3px;aspect-ratio:16/7;overflow:hidden;grid-template-rows:minmax(0,1fr);background:color-mix(in srgb,var(--c) 25%,var(--card))}
+.mosaic.m1{grid-template-columns:1fr}.mosaic.m2{grid-template-columns:1fr 1fr}.mosaic.m3{grid-template-columns:2fr 1fr;grid-template-rows:repeat(2,minmax(0,1fr))}
+.mosaic.m3 img:first-child{grid-row:span 2}
+.mosaic img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;min-height:0}
+.gb{padding:8px 14px 10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.gb h2{margin:0;font:700 22px var(--serif);color:var(--c)}
+.gb b{margin-left:auto;background:var(--c);color:#fff;border-radius:99px;padding:1px 10px;font-size:14px}
+.gb p{margin:0;width:100%;color:var(--mute);font-size:14px}
+.back{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:99px;padding:6px 14px;font:700 14px var(--sans);cursor:pointer}
+.sect{display:flex;align-items:baseline;gap:10px;margin:0 0 12px}
+.sect h2{margin:0;font:700 24px var(--serif);color:var(--c)}
+.sect p{margin:0;color:var(--mute);font-size:15px}
+@media (max-width:860px){.groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.groups{grid-template-columns:1fr}}
 .none{display:none;color:var(--mute);text-align:center;padding:30px}
 @media (max-width:1100px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media (max-width:860px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -56,58 +73,69 @@ a.g:hover,a.g:focus-visible{transform:translateY(-4px);box-shadow:0 10px 24px co
   <div class="tabs" id="tabs"></div>
   <input id="q" type="search" placeholder="Поиск игры" aria-label="Поиск" autocomplete="off">
 </div>
-<div class="grid" id="grid"></div>
+<div id="view"></div>
 <p class="none" id="no">Ничего не найдено.</p>
 </main>
 <script>
 /* Activities in display order; each game: [title, description, file name in games/, tags] */
 var A=[
-{n:"Speaking",c:"--speak",i:[
- ["Ten Faces, Ten Questions","10 человек задают вопросы вслух: 5 тем и ревижн Unit 1, Redo, лист для печати","ten-faces",["интервью","на слух"]],
- ["Spotlight 11 · Module 1: Speed Game","Relationships: 20 sec finish, guess the ending, missing word, 60 sec rush","spotlight11-speed-game",["Spotlight 11","таймер"]]]},
-{n:"Vocabulary",c:"--vocab",i:[
- ["Word Walls","Стены со словами: собери стену, потом тест","word-walls",["стена слов"]],
- ["Spotlight 10 · Module 1: Word Walls","Teen life, Character, Appearance: собери стену, потом тест","word-walls-spotlight10",["Spotlight 10"]],
- ["Word Formation: Team Challenge","Словообразование: 4 уровня A2–C1, 100 заданий, командами с таймером","word-formation",["A2–C1","jeopardy"]]]},
-{n:"Grammar",c:"--gram",i:[
+{n:"Spotlight",d:"Игры по модулям учебников Spotlight",c:"--exam2",i:[
+ ["Spotlight 10 · Module 1: Word Walls","Teen life, Character, Appearance: собери стену, потом тест","word-walls-spotlight10",["Spotlight 10","Vocabulary"]],
+ ["Spotlight 11 · Module 1: Speed Game","Relationships: 20 sec finish, guess the ending, missing word, 60 sec rush","spotlight11-speed-game",["Spotlight 11","Speaking"]]]},
+{n:"Speaking",d:"Ответы вслух и вопросы на слух",c:"--speak",i:[
+ ["Ten Faces, Ten Questions","10 человек задают вопросы вслух: 5 тем и ревижн Unit 1, Redo, лист для печати","ten-faces",["интервью","на слух"]]]},
+{n:"Grammar",d:"Времена и формы глагола",c:"--gram",i:[
  ["Funny Travel Stories: Past Simple","8 историй путешественников с аудио, карточки, бонус-раунд","funny-travel-stories",["Past Simple","аудио"]],
  ["60 Common Verbs: Sentence Builder","60 глаголов с фото: форма + время, Mixed Review, лист для печати","sixty-verbs",["фото","времена"]],
  ["Rewrite: Present Simple vs Continuous","Перепишите предложения","rewrite-tenses",["Present tenses"]]]},
-{n:"Writing",c:"--write",i:[
+{n:"Vocabulary",d:"Слова, фразы и словообразование",c:"--vocab",i:[
+ ["Word Walls","Стены со словами: собери стену, потом тест","word-walls",["стена слов"]],
+ ["Word Formation: Team Challenge","Словообразование: 4 уровня A2–C1, 100 заданий, командами с таймером","word-formation",["A2–C1","jeopardy"]]]},
+{n:"Writing",d:"Ответы на сообщения и полезные фразы",c:"--write",i:[
  ["Chat Reply: Across Generations","10 чатов, карточки с озвучкой, игра «Who is replying?»","chat-reply",["чаты","стиль"]]]},
-{n:"ЕГЭ",c:"--exam",i:[
+{n:"ЕГЭ",d:"Подготовка к экзамену в формате ФИПИ",c:"--exam",i:[
  ["Тренажёр «Travelling»","Задания в формате ФИПИ","ege-travelling",["ФИПИ"]]]}
 ];
-var cur="all",q="";
+var cur="",q="";
 function esc(s){return s.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function tabs(){
-  var total=A.reduce(function(s,a){return s+a.i.length},0);
-  var h='<button class="tab" data-n="all" aria-pressed="'+(cur==="all")+'">Все <em>'+total+'</em></button>';
+  var h='<button class="tab" data-n="" aria-pressed="'+(cur==="")+'">Все</button>';
   A.forEach(function(a){h+='<button class="tab" style="--c:var('+a.c+')" data-n="'+esc(a.n)+'" aria-pressed="'+(cur===a.n)+'"><i></i>'+esc(a.n)+' <em>'+a.i.length+'</em></button>'});
   var t=document.getElementById("tabs");t.innerHTML=h;
-  t.querySelectorAll(".tab").forEach(function(b){b.onclick=function(){cur=b.dataset.n;tabs();draw()}});
+  t.querySelectorAll(".tab").forEach(function(b){b.onclick=function(){open(b.dataset.n)}});
+}
+function card(a,x){
+  return '<a class="g" style="--c:var('+a.c+')" href="games/'+x[2]+'.html">'+
+    '<div class="pic"><img src="games/thumbs/'+x[2]+'.jpg" alt="" loading="lazy"><span class="chip">'+esc(a.n)+'</span></div>'+
+    '<div class="body"><div class="t">'+esc(x[0])+'</div><div class="d">'+esc(x[1])+'</div>'+
+    '<div class="tags">'+x[3].map(function(t){return '<span>'+esc(t)+'</span>'}).join("")+'</div></div></a>';
 }
 function draw(){
-  var h="",n=0;
-  A.forEach(function(a){
-    if(cur!=="all"&&cur!==a.n)return;
-    a.i.forEach(function(x){
-      if((x[0]+" "+x[1]+" "+x[3].join(" ")).toLowerCase().indexOf(q)<0)return;n++;
-      h+='<a class="g" style="--c:var('+a.c+')" href="games/'+x[2]+'.html">'+
-        '<div class="pic"><img src="games/thumbs/'+x[2]+'.jpg" alt="" loading="lazy"><span class="chip">'+esc(a.n)+'</span></div>'+
-        '<div class="body"><div class="t">'+esc(x[0])+'</div><div class="d">'+esc(x[1])+'</div>'+
-        '<div class="tags">'+x[3].map(function(t){return '<span>'+esc(t)+'</span>'}).join("")+'</div></div></a>';
-    });
-  });
-  document.getElementById("grid").innerHTML=h;
+  var v=document.getElementById("view"),h="",n=0;
+  if(q){ /* search across all sections */
+    A.forEach(function(a){a.i.forEach(function(x){if((x[0]+" "+x[1]+" "+x[3].join(" ")).toLowerCase().indexOf(q)>-1){n++;h+=card(a,x)}})});
+    v.innerHTML='<div class="grid">'+h+'</div>';
+  }else if(!cur){ /* home: one button per section */
+    A.forEach(function(a){n++;var k=Math.min(a.i.length,3);
+      h+='<button class="grp" style="--c:var('+a.c+')" data-n="'+esc(a.n)+'"><div class="mosaic m'+k+'">'+
+        a.i.slice(0,3).map(function(x){return '<img src="games/thumbs/'+x[2]+'.jpg" alt="">'}).join("")+
+        '</div><div class="gb"><h2>'+esc(a.n)+'</h2><b>'+a.i.length+'</b><p>'+esc(a.d)+'</p></div></button>'});
+    v.innerHTML='<div class="groups">'+h+'</div>';
+    v.querySelectorAll(".grp").forEach(function(b){b.onclick=function(){open(b.dataset.n)}});
+  }else{ /* one section */
+    var a=A.filter(function(x){return x.n===cur})[0];
+    a.i.forEach(function(x){n++;h+=card(a,x)});
+    v.innerHTML='<div class="sect" style="--c:var('+a.c+')"><button class="back" id="bk">← Все разделы</button><h2>'+esc(a.n)+'</h2><p>'+esc(a.d)+'</p></div><div class="grid">'+h+'</div>';
+    document.getElementById("bk").onclick=function(){open("")};
+  }
   document.getElementById("no").style.display=n?"none":"block";
 }
+function open(n){cur=n;q="";document.getElementById("q").value="";tabs();draw();window.scrollTo(0,0)}
 document.getElementById("q").oninput=function(){q=this.value.trim().toLowerCase();draw()};
-/* Always open at the very top of the page, with all games and an empty search. */
+/* Always open at the very top, on the section buttons, with an empty search. */
 if("scrollRestoration" in history)history.scrollRestoration="manual";
-function fresh(){cur="all";q="";document.getElementById("q").value="";tabs();draw();window.scrollTo(0,0)}
-window.addEventListener("pageshow",fresh);
-fresh();
+window.addEventListener("pageshow",function(){open("")});
+open("");
 </script>
 </body>
 </html>
