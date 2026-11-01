@@ -872,7 +872,7 @@ function sGet(k, def){ try{ const v=localStorage.getItem(k); return v===null?def
 function sSet(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
 
 let cur = null, step = 0, done = {};
-try { const saved = sGet('fts_done',''); if(saved) done = JSON.parse(saved); } catch(e){}
+/* Always start fresh: completed stories are not restored on open. */
 function saveDone(){ sSet('fts_done', JSON.stringify(done)); }
 
 let SND = sGet('snd','1') !== '0', AC;
