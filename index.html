@@ -8,14 +8,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=PT+Sans:wght@400;700&display=swap">
 <style>
 :root{
-  --bg:#f3f6fb;--card:#fff;--ink:#1d2a3a;--mute:#5d6b80;--line:#e1e7f0;--teal:#14a38b;
+  --bg:#f8e6d8;--page:linear-gradient(180deg,#f8e6d8 0%,#f4dccb 100%);--card:#fff8f1;--ink:#2a1f24;--mute:#6e5a5a;--line:#ecd4c2;--teal:#14a38b;
   --spot:#d64545;--speak:#e0a100;--listen:#0fa3a3;--gram:#3b6fe0;--vocab:#8b4fe0;--write:#e0701a;--exam:#c2367f;
   --serif:"PT Serif",Georgia,"Times New Roman",serif;--sans:"PT Sans","Segoe UI",Arial,sans-serif;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151b26;--card:#1f2734;--ink:#eef2f8;--mute:#a7b2c4;--line:#323c4d}}
-:root[data-theme="dark"]{--bg:#151b26;--card:#1f2734;--ink:#eef2f8;--mute:#a7b2c4;--line:#323c4d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151b26;--page:#151b26;--card:#1f2734;--ink:#eef2f8;--mute:#a7b2c4;--line:#323c4d}}
+:root[data-theme="dark"]{--bg:#151b26;--page:#151b26;--card:#1f2734;--ink:#eef2f8;--mute:#a7b2c4;--line:#323c4d}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 var(--sans)}
+body{margin:0;background:var(--page);background-attachment:fixed;color:var(--ink);font:16px/1.4 var(--sans)}
 button,select,input{font:inherit;color:inherit}
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
 
@@ -31,7 +31,7 @@ nav button.on{color:var(--teal);border-color:var(--teal)}
 .count-top{color:var(--mute);font-size:14px;white-space:nowrap}
 
 /* 2. category bar */
-.cats{background:color-mix(in srgb,var(--bg) 60%,var(--card));border-bottom:1px solid var(--line)}
+.cats{background:color-mix(in srgb,var(--bg) 45%,var(--card));border-bottom:1px solid var(--line)}
 .cb{display:flex;gap:6px;overflow-x:auto;padding:6px 16px;scrollbar-width:thin;justify-content:space-between}
 .cat{display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:10px;border:0;background:none;cursor:pointer;font-weight:700;white-space:nowrap;color:var(--ink)}
 .cat svg{width:19px;height:19px;stroke:var(--c);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
