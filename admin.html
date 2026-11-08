@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Cool games · Teacher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=PT+Sans:wght@400;700&display=swap">
+<style>
+:root{
+  --bg:#f8e6d8;--page:linear-gradient(180deg,#f8e6d8 0%,#f4dccb 100%);--card:#fff8f1;--ink:#2a1f24;--mute:#6e5a5a;--line:#ecd4c2;--teal:#14a38b;--red:#c63b3b;
+  --spot:#d64545;--speak:#e0a100;--listen:#0fa3a3;--gram:#3b6fe0;--vocab:#8b4fe0;--write:#e0701a;--exam:#c2367f;
+  --serif:"PT Serif",Georgia,"Times New Roman",serif;--sans:"PT Sans","Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151b26;--page:#151b26;--card:#1f2734;--ink:#eef2f8;--mute:#a7b2c4;--line:#323c4d}}
+:root[data-theme="dark"]{--bg:#151b26;--page:#151b26;--card:#1f2734;--ink:#eef2f8;--mute:#a7b2c4;--line:#323c4d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);background-attachment:fixed;color:var(--ink);font:16px/1.4 var(--sans);min-height:100vh}
+button,select,input,textarea{font:inherit;color:inherit}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+header{background:var(--card);border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(20,40,80,.06)}
+.hd{display:flex;align-items:center;gap:14px;height:54px}
+.logo{display:flex;align-items:center;gap:8px;font:700 20px var(--serif);color:var(--ink);text-decoration:none}
+.logo svg{width:26px;height:26px}.logo span{color:var(--teal)}
+.badge{font:700 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--exam);border-radius:6px;padding:2px 8px}
+.sp{flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:7px 13px;cursor:pointer;font-weight:700;text-decoration:none;color:var(--ink);white-space:nowrap}
+.btn:hover{border-color:var(--teal);color:var(--teal)}
+.btn.main{background:var(--teal);border-color:var(--teal);color:#fff}.btn.main:hover{filter:brightness(1.07);color:#fff}
+.btn.del{color:var(--red)}.btn.del:hover{border-color:var(--red);background:color-mix(in srgb,var(--red) 8%,var(--card))}
+.btn.sm{padding:5px 10px;font-size:14px}
+.btn:disabled{opacity:.5;cursor:wait}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:16px 0;box-shadow:0 2px 10px rgba(20,40,80,.05)}
+h1,h2{font-family:var(--serif);margin:0 0 8px}h1{font-size:24px}h2{font-size:19px}
+.mute{color:var(--mute)}
+ol{margin:8px 0 12px;padding-left:22px}ol li{margin:3px 0}
+a{color:var(--teal)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input[type=text],input[type=password],input[type=date],select,textarea{border:1.5px solid var(--line);border-radius:10px;padding:8px 11px;background:var(--card);width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--teal)}
+.tabs{display:flex;gap:6px;margin:16px 0 0}
+.tab{border:1px solid var(--line);border-bottom:0;background:color-mix(in srgb,var(--bg) 50%,var(--card));border-radius:12px 12px 0 0;padding:9px 16px;font-weight:700;cursor:pointer}
+.tab.on{background:var(--card);color:var(--teal)}
+.tabs+.panel{margin-top:0;border-top-left-radius:0}
+.list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.it{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:8px;background:var(--card)}
+.it img,.it .noimg{width:96px;height:60px;object-fit:cover;object-position:top;border-radius:8px;flex:none;background:var(--bg)}
+.it .info{flex:1;min-width:0}
+.it .t{font:700 16px/1.2 var(--serif)}
+.it .m{color:var(--mute);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.dir{font:700 15px var(--serif);margin:14px 0 4px;color:var(--mute)}
+.f{display:flex;align-items:center;gap:10px;padding:6px 8px;border-bottom:1px solid var(--line)}
+.f:last-child{border-bottom:0}
+.f .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.f .s{color:var(--mute);font-size:13px;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#24303f;color:#fff;border-radius:12px;padding:11px 18px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:min(92vw,560px);display:none;z-index:50}
+.toast.ok{background:#127a68}.toast.err{background:#a53030}
+dialog{border:0;border-radius:16px;padding:0;background:var(--card);color:var(--ink);width:min(720px,94vw);max-height:92vh;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(30,20,25,.45)}
+.dh{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.dh h2{margin:0;flex:1}
+.db{padding:14px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;overflow:auto;max-height:calc(92vh - 130px)}
+.db .full{grid-column:1/-1}
+label.l{display:block;font-weight:700;font-size:14px;margin-bottom:4px}
+.hint{font-size:13px;color:var(--mute);margin-top:3px}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:12px;text-align:center;cursor:pointer;background:color-mix(in srgb,var(--bg) 40%,var(--card))}
+.drop:hover,.drop.over{border-color:var(--teal)}
+.drop b{color:var(--teal)}
+.drop .fn{font-size:13.5px;color:var(--ink);margin-top:4px;word-break:break-all}
+.prev{display:flex;gap:10px;align-items:center}
+.prev img{width:120px;height:75px;object-fit:cover;object-position:top;border-radius:8px;border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--c);color:var(--c);background:transparent;border-radius:999px;padding:4px 12px;font-weight:700;cursor:pointer;font-size:14px}
+.chip.on{background:var(--c);color:#fff}
+.df{display:flex;gap:8px;justify-content:flex-end;padding:12px 18px;border-top:1px solid var(--line)}
+.hide{display:none!important}
+@media (max-width:640px){.db{grid-template-columns:1fr}.it{flex-wrap:wrap}.it .acts{width:100%;justify-content:flex-start}}
+</style>
+</head>
+<body>
+<header><div class="wrap hd">
+  <a class="logo" href="index.html"><svg viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="8" fill="#14a38b"/><path d="M10 12h12M10 16h8M10 20h12" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>Cool <span>games</span></a>
+  <span class="badge">Teacher</span>
+  <span class="sp"></span>
+  <a class="btn sm" href="index.html">На главную</a>
+  <button class="btn sm hide" id="logout" title="Убрать ключ с этого компьютера">Выйти</button>
+</div></header>
+
+<main class="wrap">
+  <!-- Connect -->
+  <section class="panel hide" id="connect">
+    <h1>Подключение</h1>
+    <p class="mute">Чтобы загружать и удалять файлы прямо с сайта, нужен ключ доступа GitHub. Он делается один раз и хранится только в этом браузере.</p>
+    <ol>
+      <li>Откройте <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">страницу создания ключа на GitHub</a> (войдите под altatiana7).</li>
+      <li><b>Token name</b> — например, <i>cool-games</i>. <b>Expiration</b> — выберите срок (можно <i>No expiration</i> или 1 год).</li>
+      <li><b>Repository access</b> → <i>Only select repositories</i> → выберите <b>cool-games</b>.</li>
+      <li><b>Permissions</b> → <i>Repository permissions</i> → <b>Contents</b> → <b>Read and write</b>.</li>
+      <li>Нажмите <b>Generate token</b>, скопируйте ключ (начинается с <code>github_pat_</code>) и вставьте ниже.</li>
+    </ol>
+    <div class="row">
+      <input type="password" id="tok" placeholder="github_pat_…" autocomplete="off" style="flex:1;min-width:220px">
+      <button class="btn main" id="tokGo">Подключить</button>
+    </div>
+  </section>
+
+  <!-- Work area -->
+  <div id="work" class="hide">
+    <div class="tabs"><button class="tab on" data-t="games">Игры на главной</button><button class="tab" data-t="files">Все файлы</button></div>
+    <section class="panel" id="tGames">
+      <div class="row"><h2 style="flex:1;margin:0">Игры <span class="mute" id="gCount"></span></h2><button class="btn main" id="add">+ Добавить игру</button></div>
+      <div class="list" id="gList"></div>
+    </section>
+    <section class="panel hide" id="tFiles">
+      <div class="row">
+        <h2 style="flex:1;margin:0">Все файлы сайта</h2>
+        <select id="upDir" style="width:auto"></select>
+        <button class="btn main" id="upBtn">Загрузить файлы</button>
+        <input type="file" id="upInput" multiple class="hide">
+      </div>
+      <p class="hint">Файлы попадут в выбранную папку. Если файл с таким именем уже есть, он будет заменён.</p>
+      <div id="fList"></div>
+    </section>
+  </div>
+</main>
+
+<!-- Game editor -->
+<dialog id="dlg">
+  <div class="dh"><h2 id="dTitle">Новая игра</h2><button class="btn sm" id="dClose">Закрыть</button></div>
+  <div class="db">
+    <div>
+      <label class="l">Файл игры (.html)</label>
+      <div class="drop" id="dHtml"><b>Выбрать файл</b> или перетащить сюда<div class="fn" id="dHtmlName"></div></div>
+      <input type="file" id="iHtml" accept=".html,.htm,text/html" class="hide">
+      <div class="hint" id="dHtmlHint">Обязательно для новой игры.</div>
+    </div>
+    <div>
+      <label class="l">Картинка для карточки</label>
+      <div class="drop" id="dPic"><div class="prev"><img id="dPicPrev" class="hide" alt=""><div><b>Выбрать картинку</b><div class="fn" id="dPicName"></div></div></div></div>
+      <input type="file" id="iPic" accept="image/*" class="hide">
+      <div class="hint">jpg / png / webp — уменьшится автоматически.</div>
+    </div>
+    <div class="full">
+      <label class="l" for="fTitle">Название</label>
+      <input type="text" id="fTitle">
+    </div>
+    <div class="full">
+      <label class="l" for="fDesc">Короткое описание</label>
+      <input type="text" id="fDesc">
+    </div>
+    <div class="full">
+      <label class="l">Категории</label>
+      <div class="chips" id="fCats"></div>
+    </div>
+    <div>
+      <label class="l" for="fLvl">Уровень</label>
+      <select id="fLvl"><option>A1–A2</option><option>B1</option><option>B2</option><option>C1</option></select>
+    </div>
+    <div>
+      <label class="l" for="fDate">Дата добавления</label>
+      <input type="date" id="fDate">
+    </div>
+    <div class="full">
+      <label class="l" for="fTags">Теги (через запятую)</label>
+      <input type="text" id="fTags" placeholder="Past Simple, квиз">
+    </div>
+    <div class="full">
+      <label class="l">Дополнительные файлы игры (фото, аудио) — по желанию</label>
+      <div class="drop" id="dExtra"><b>Выбрать файлы</b><div class="fn" id="dExtraName"></div></div>
+      <input type="file" id="iExtra" multiple class="hide">
+      <div class="hint" id="dExtraHint"></div>
+    </div>
+  </div>
+  <div class="df"><button class="btn" id="dCancel">Отмена</button><button class="btn main" id="dSave">Сохранить</button></div>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var OWNER="altatiana7",REPO="cool-games",BRANCH="main",KEY="coolgames.token";
+var CATS=[["spot","Spotlight","--spot"],["speak","Speaking","--speak"],["listen","Listening","--listen"],["gram","Grammar","--gram"],["vocab","Vocabulary","--vocab"],["write","Writing","--write"],["exam","ЕГЭ","--exam"]];
+var PROTECT={"index.html":1,"admin.html":1,"games.json":1,".nojekyll":1,"README.md":1};
+var $=function(id){return document.getElementById(id)};
+var token="",games=[],tree=[],edit=null,files={html:null,pic:null,extra:[]};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+
+/* ---------- toast ---------- */
+var tt;
+function toast(msg,kind,ms){var t=$("toast");t.textContent=msg;t.className="toast "+(kind||"");t.style.display="block";clearTimeout(tt);if(ms!==0)tt=setTimeout(function(){t.style.display="none"},ms||4500)}
+
+/* ---------- GitHub API ---------- */
+function api(path,opt){
+  opt=opt||{};
+  var h={"Authorization":"Bearer "+token,"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"};
+  if(opt.body)h["Content-Type"]="application/json";
+  return fetch("https://api.github.com"+path,{method:opt.method||"GET",headers:h,body:opt.body?JSON.stringify(opt.body):undefined,cache:"no-store"})
+   .then(function(r){
+     if(r.status===204)return null;
+     return r.json().catch(function(){return {}}).then(function(j){
+       if(!r.ok){var e=new Error(j.message||("Ошибка "+r.status));e.status=r.status;throw e}
+       return j});
+   });
+}
+var R="/repos/"+OWNER+"/"+REPO;
+/* One commit for many changes. changes: [{path, b64}] to add/replace, [{path, del:true}] to remove. */
+function commit(message,changes){
+  var base;
+  return api(R+"/git/ref/heads/"+BRANCH).then(function(ref){base=ref.object.sha;return api(R+"/git/commits/"+base)})
+  .then(function(c){
+    return Promise.all(changes.map(function(ch){
+      if(ch.del)return Promise.resolve({path:ch.path,mode:"100644",type:"blob",sha:null});
+      return api(R+"/git/blobs",{method:"POST",body:{content:ch.b64,encoding:"base64"}}).then(function(b){return {path:ch.path,mode:"100644",type:"blob",sha:b.sha}});
+    })).then(function(items){return api(R+"/git/trees",{method:"POST",body:{base_tree:c.tree.sha,tree:items}})});
+  })
+  .then(function(t){return api(R+"/git/commits",{method:"POST",body:{message:message,tree:t.sha,parents:[base]}})})
+  .then(function(nc){return api(R+"/git/refs/heads/"+BRANCH,{method:"PATCH",body:{sha:nc.sha}})});
+}
+function loadAll(){
+  return Promise.all([
+    api(R+"/git/trees/"+BRANCH+"?recursive=1"),
+    api(R+"/contents/games.json?ref="+BRANCH)
+  ]).then(function(r){
+    tree=r[0].tree.filter(function(x){return x.type==="blob"});
+    games=JSON.parse(fromB64(r[1].content));
+    drawGames();drawFiles();
+  });
+}
+
+/* ---------- base64 helpers ---------- */
+function bytesToB64(bytes){var s="",n=0x8000;for(var i=0;i<bytes.length;i+=n)s+=String.fromCharCode.apply(null,bytes.subarray(i,i+n));return btoa(s)}
+function textToB64(t){return bytesToB64(new TextEncoder().encode(t))}
+function fromB64(b){var bin=atob(b.replace(/\s/g,"")),u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new TextDecoder().decode(u)}
+function fileB64(f){return f.arrayBuffer().then(function(a){return bytesToB64(new Uint8Array(a))})}
+/* Card picture: shrink to 640px wide JPEG */
+function thumbB64(f){
+  return createImageBitmap(f).then(function(img){
+    var w=Math.min(640,img.width),h=Math.round(img.height*w/img.width);
+    var c=document.createElement("canvas");c.width=w;c.height=h;
+    var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,h);x.drawImage(img,0,0,w,h);
+    return new Promise(function(res){c.toBlob(res,"image/jpeg",.86)});
+  }).then(fileB64);
+}
+function slugify(name){
+  return name.replace(/\.[^.]+$/,"").toLowerCase().replace(/[^a-z0-9а-яё]+/g,"-").replace(/^-+|-+$/g,"")
+    .replace(/[а-яё]/g,function(ch){return {"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"e","ж":"zh","з":"z","и":"i","й":"y","к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f","х":"h","ц":"ts","ч":"ch","ш":"sh","щ":"sch","ъ":"","ы":"y","ь":"","э":"e","ю":"yu","я":"ya"}[ch]})||"game";
+}
+function safeName(n){return n.replace(/[\\/:*?"<>|#%]+/g,"-").replace(/\s+/g,"-")}
+function kb(n){return n>1048576?(n/1048576).toFixed(1)+" МБ":Math.max(1,Math.round(n/1024))+" КБ"}
+function today(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+var LIVE=" Сайт обновится примерно через минуту.";
+
+/* ---------- games list ---------- */
+function drawGames(){
+  $("gCount").textContent="· "+games.length;
+  var list=games.slice().sort(function(a,b){return (b.date||"").localeCompare(a.date||"")});
+  $("gList").innerHTML=list.map(function(g){
+    var cats=(g.cats||[]).map(function(k){var c=CATS.filter(function(x){return x[0]===k})[0];return c?c[1]:k}).join(", ");
+    return '<div class="it">'+(g.thumb?'<img src="'+esc(g.thumb)+'?v='+Date.now()+'" alt="">':'<div class="noimg"></div>')+
+      '<div class="info"><div class="t">'+esc(g.title)+'</div><div class="m">'+esc([g.level,cats,g.date].filter(Boolean).join(" · "))+'</div></div>'+
+      '<div class="acts"><a class="btn sm" href="games/'+esc(g.file)+'.html" target="_blank" rel="noopener">Открыть</a>'+
+      '<button class="btn sm" data-ed="'+esc(g.file)+'">Изменить</button><button class="btn sm del" data-rm="'+esc(g.file)+'">Удалить</button></div></div>';
+  }).join("")||'<p class="mute">Пока нет игр.</p>';
+  $("gList").querySelectorAll("[data-ed]").forEach(function(b){b.onclick=function(){openEditor(find(b.dataset.ed))}});
+  $("gList").querySelectorAll("[data-rm]").forEach(function(b){b.onclick=function(){removeGame(find(b.dataset.rm),b)}});
+}
+function find(f){return games.filter(function(g){return g.file===f})[0]}
+function removeGame(g,btn){
+  if(!confirm("Удалить игру «"+g.title+"» с сайта?\nФайл игры, картинка и её папка тоже будут удалены."))return;
+  btn.disabled=true;toast("Удаляю…","",0);
+  var paths=["games/"+g.file+".html"];if(g.thumb)paths.push(g.thumb);
+  tree.forEach(function(x){if(x.path.indexOf("games/"+g.file+"/")===0)paths.push(x.path)});
+  var rest=games.filter(function(x){return x!==g});
+  var ch=paths.filter(function(p){return tree.some(function(x){return x.path===p})}).map(function(p){return {path:p,del:true}});
+  ch.push({path:"games.json",b64:textToB64(JSON.stringify(rest,null,1)+"\n")});
+  commit("Удалена игра: "+g.title,ch).then(loadAll).then(function(){toast("Игра удалена."+LIVE,"ok",6000)})
+   .catch(function(e){btn.disabled=false;fail(e)});
+}
+
+/* ---------- editor ---------- */
+$("fCats").innerHTML=CATS.map(function(c){return '<button type="button" class="chip" style="--c:var('+c[2]+')" data-k="'+c[0]+'">'+c[1]+'</button>'}).join("");
+$("fCats").querySelectorAll(".chip").forEach(function(b){b.onclick=function(){b.classList.toggle("on")}});
+function openEditor(g){
+  edit=g||null;files={html:null,pic:null,extra:[]};
+  $("dTitle").textContent=g?"Изменить игру":"Новая игра";
+  $("fTitle").value=g?g.title:"";$("fDesc").value=g?g.desc:"";$("fLvl").value=g?g.level:"B1";
+  $("fDate").value=g?g.date:today();$("fTags").value=g?(g.tags||[]).join(", "):"";
+  $("fCats").querySelectorAll(".chip").forEach(function(b){b.classList.toggle("on",!!g&&(g.cats||[]).indexOf(b.dataset.k)>-1)});
+  $("dHtmlName").textContent=g?"Сейчас: games/"+g.file+".html":"";
+  $("dHtmlHint").textContent=g?"Выберите новый файл, только если хотите заменить игру.":"Обязательно для новой игры.";
+  $("dPicName").textContent=g&&g.thumb?"Можно заменить":"";
+  if(g&&g.thumb){$("dPicPrev").src=g.thumb+"?v="+Date.now();$("dPicPrev").classList.remove("hide")}else $("dPicPrev").classList.add("hide");
+  $("dExtraName").textContent="";
+  var ex=g?tree.filter(function(x){return x.path.indexOf("games/"+g.file+"/")===0}).length:0;
+  $("dExtraHint").textContent=ex?"У этой игры уже есть файлов в её папке: "+ex+". Файлы с теми же именами заменятся.":"Попадут в папку игры — например, если в игре есть фото людей или аудио.";
+  $("dSave").disabled=false;
+  $("dlg").showModal();
+}
+function pick(drop,input,cb){
+  drop.onclick=function(){input.click()};
+  input.onchange=function(){if(input.files.length)cb(Array.from(input.files));input.value=""};
+  drop.ondragover=function(e){e.preventDefault();drop.classList.add("over")};
+  drop.ondragleave=function(){drop.classList.remove("over")};
+  drop.ondrop=function(e){e.preventDefault();drop.classList.remove("over");if(e.dataTransfer.files.length)cb(Array.from(e.dataTransfer.files))};
+}
+pick($("dHtml"),$("iHtml"),function(fs){
+  var f=fs[0];files.html=f;$("dHtmlName").textContent=f.name+" · "+kb(f.size);
+  if(!$("fTitle").value)f.text().then(function(t){var m=t.match(/<title>([^<]*)<\/title>/i);if(m&&!$("fTitle").value)$("fTitle").value=m[1].trim()});
+});
+pick($("dPic"),$("iPic"),function(fs){var f=fs[0];files.pic=f;$("dPicName").textContent=f.name;$("dPicPrev").src=URL.createObjectURL(f);$("dPicPrev").classList.remove("hide")});
+pick($("dExtra"),$("iExtra"),function(fs){files.extra=files.extra.concat(fs);$("dExtraName").textContent=files.extra.map(function(f){return f.name}).join(", ")});
+$("dClose").onclick=$("dCancel").onclick=function(){$("dlg").close()};
+
+$("dSave").onclick=function(){
+  var title=$("fTitle").value.trim();
+  if(!edit&&!files.html){toast("Выберите файл игры (.html).","err");return}
+  if(!title){toast("Напишите название игры.","err");return}
+  var cats=Array.from($("fCats").querySelectorAll(".chip.on")).map(function(b){return b.dataset.k});
+  if(!cats.length){toast("Отметьте хотя бы одну категорию.","err");return}
+  var slug=edit?edit.file:slugify(files.html.name);
+  if(!edit&&find(slug)&&!confirm("Игра с файлом «"+slug+".html» уже есть. Заменить её?"))return;
+  var old=edit||find(slug);
+  var g={title:title,desc:$("fDesc").value.trim(),file:slug,cats:cats,level:$("fLvl").value,date:$("fDate").value||today(),
+    tags:$("fTags").value.split(",").map(function(s){return s.trim()}).filter(Boolean),thumb:old?old.thumb||"":""};
+  $("dSave").disabled=true;toast("Загружаю…","",0);
+  var ch=[],jobs=[];
+  if(files.html)jobs.push(fileB64(files.html).then(function(b){ch.push({path:"games/"+slug+".html",b64:b})}));
+  if(files.pic){g.thumb="games/thumbs/"+slug+".jpg";jobs.push(thumbB64(files.pic).then(function(b){ch.push({path:g.thumb,b64:b})}))}
+  files.extra.forEach(function(f){jobs.push(fileB64(f).then(function(b){ch.push({path:"games/"+slug+"/"+safeName(f.name),b64:b})}))});
+  Promise.all(jobs).then(function(){
+    var next=games.filter(function(x){return x.file!==slug});
+    if(old){var i=games.indexOf(old);next.splice(Math.min(i,next.length),0,g)}else next.unshift(g);
+    ch.push({path:"games.json",b64:textToB64(JSON.stringify(next,null,1)+"\n")});
+    return commit((edit?"Изменена игра: ":"Добавлена игра: ")+title,ch);
+  }).then(loadAll).then(function(){$("dlg").close();toast((edit?"Сохранено.":"Игра добавлена.")+LIVE,"ok",6000)})
+   .catch(function(e){$("dSave").disabled=false;fail(e)});
+};
+
+/* ---------- all files ---------- */
+function drawFiles(){
+  var dirs={},opts={"":1,"games":1,"games/thumbs":1};
+  tree.forEach(function(x){var i=x.path.lastIndexOf("/"),d=i<0?"":x.path.slice(0,i);(dirs[d]=dirs[d]||[]).push(x);opts[d]=1});
+  var keep=$("upDir").value;
+  $("upDir").innerHTML=Object.keys(opts).sort().map(function(d){return '<option value="'+esc(d)+'">'+(d?esc(d)+"/":"главная папка")+'</option>'}).join("");
+  $("upDir").value=keep&&opts[keep]?keep:"games";
+  $("fList").innerHTML=Object.keys(dirs).sort().map(function(d){
+    return '<div class="dir">'+(d?esc(d)+"/":"Главная папка")+'</div><div>'+dirs[d].map(function(x){
+      var n=x.path.slice(d?d.length+1:0),prot=PROTECT[x.path];
+      return '<div class="f"><span class="n">'+esc(n)+'</span><span class="s">'+kb(x.size||0)+'</span>'+
+        '<a class="btn sm" href="'+esc(x.path)+'" target="_blank" rel="noopener">Открыть</a>'+
+        '<button class="btn sm" data-rep="'+esc(x.path)+'">Заменить</button>'+
+        (prot?'':'<button class="btn sm del" data-del="'+esc(x.path)+'">Удалить</button>')+'</div>';
+    }).join("")+'</div>';
+  }).join("");
+  $("fList").querySelectorAll("[data-del]").forEach(function(b){b.onclick=function(){delFile(b.dataset.del,b)}});
+  $("fList").querySelectorAll("[data-rep]").forEach(function(b){b.onclick=function(){repFile(b.dataset.rep,b)}});
+}
+function delFile(p,btn){
+  if(!confirm("Удалить файл «"+p+"»?"))return;
+  btn.disabled=true;toast("Удаляю…","",0);
+  commit("Удалён файл: "+p,[{path:p,del:true}]).then(loadAll).then(function(){toast("Файл удалён."+LIVE,"ok",6000)}).catch(function(e){btn.disabled=false;fail(e)});
+}
+function repFile(p,btn){
+  var inp=document.createElement("input");inp.type="file";
+  inp.onchange=function(){
+    var f=inp.files[0];if(!f)return;
+    if(!confirm("Заменить «"+p+"» файлом «"+f.name+"»?"))return;
+    btn.disabled=true;toast("Загружаю…","",0);
+    fileB64(f).then(function(b){return commit("Заменён файл: "+p,[{path:p,b64:b}])}).then(loadAll)
+     .then(function(){toast("Файл заменён."+LIVE,"ok",6000)}).catch(function(e){btn.disabled=false;fail(e)});
+  };
+  inp.click();
+}
+$("upBtn").onclick=function(){$("upInput").click()};
+$("upInput").onchange=function(){
+  var fs=Array.from(this.files),d=$("upDir").value;this.value="";if(!fs.length)return;
+  $("upBtn").disabled=true;toast("Загружаю "+fs.length+" файл(ов)…","",0);
+  Promise.all(fs.map(function(f){return fileB64(f).then(function(b){return {path:(d?d+"/":"")+safeName(f.name),b64:b}})}))
+   .then(function(ch){return commit("Загружены файлы в "+(d||"главную папку"),ch)}).then(loadAll)
+   .then(function(){$("upBtn").disabled=false;toast("Загружено."+LIVE,"ok",6000)}).catch(function(e){$("upBtn").disabled=false;fail(e)});
+};
+
+/* ---------- tabs, login ---------- */
+document.querySelectorAll(".tab").forEach(function(t){t.onclick=function(){
+  document.querySelectorAll(".tab").forEach(function(x){x.classList.toggle("on",x===t)});
+  $("tGames").classList.toggle("hide",t.dataset.t!=="games");$("tFiles").classList.toggle("hide",t.dataset.t!=="files");
+}});
+function fail(e){
+  if(e.status===401){toast("Ключ не подходит или истёк. Подключитесь заново.","err",8000);logout();return}
+  if(e.status===403||e.status===404){toast("У ключа нет права записи в cool-games. Проверьте: Contents → Read and write.","err",9000);return}
+  if(e.status===409||e.status===422){toast("Сайт как раз обновлялся. Попробуйте ещё раз.","err",7000);loadAll().catch(function(){});return}
+  toast("Не получилось: "+e.message,"err",8000);
+}
+function store(v){try{v?localStorage.setItem(KEY,v):localStorage.removeItem(KEY)}catch(e){}}
+function stored(){try{return localStorage.getItem(KEY)||""}catch(e){return ""}}
+function connect(t){
+  token=t;toast("Подключаюсь…","",0);
+  return api(R).then(function(r){
+    if(!r.permissions||!r.permissions.push){var e=new Error("no push");e.status=403;throw e}
+    BRANCH=r.default_branch||BRANCH;store(t);
+    $("connect").classList.add("hide");$("work").classList.remove("hide");$("logout").classList.remove("hide");
+    return loadAll();
+  }).then(function(){$("toast").style.display="none"});
+}
+function logout(){store("");token="";$("work").classList.add("hide");$("logout").classList.add("hide");$("connect").classList.remove("hide");$("tok").value=""}
+$("logout").onclick=function(){if(confirm("Убрать ключ с этого компьютера? Потом его нужно будет вставить снова."))logout()};
+$("add").onclick=function(){openEditor(null)};
+$("tokGo").onclick=function(){var t=$("tok").value.trim();if(!t){toast("Вставьте ключ.","err");return}connect(t).catch(function(e){token="";if(e.status===401){toast("Ключ не подходит. Проверьте, что скопировали его полностью.","err",8000)}else fail(e)})};
+$("tok").onkeydown=function(e){if(e.key==="Enter")$("tokGo").click()};
+if("scrollRestoration" in history)history.scrollRestoration="manual";
+window.scrollTo(0,0);
+var saved=stored();
+if(saved)connect(saved).catch(function(e){if(e.status===401){logout();toast("Ключ истёк — вставьте новый.","err",8000)}else{$("connect").classList.remove("hide");fail(e)}});
+else $("connect").classList.remove("hide");
+</script>
+</body>
+</html>

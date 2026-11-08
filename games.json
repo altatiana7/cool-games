@@ -1,0 +1,167 @@
+[
+ {
+  "title": "Who Dared to Be Different?",
+  "desc": "8 портретов без имён: подсказки по фото, Grammar Doctor, Who said it?, словарь и аудирование",
+  "file": "who-dared",
+  "cats": [
+   "speak",
+   "vocab",
+   "gram",
+   "listen"
+  ],
+  "level": "B1",
+  "date": "2026-11-03",
+  "tags": [
+   "биография",
+   "квиз"
+  ],
+  "thumb": "games/thumbs/who-dared.jpg"
+ },
+ {
+  "title": "Funny Travel Stories: Past Simple",
+  "desc": "8 историй путешественников с аудио, карточки, бонус-раунд «Who told this story?»",
+  "file": "funny-travel-stories",
+  "cats": [
+   "gram",
+   "listen"
+  ],
+  "level": "A1–A2",
+  "date": "2026-11-01",
+  "tags": [
+   "Past Simple"
+  ],
+  "thumb": "games/thumbs/funny-travel-stories.jpg"
+ },
+ {
+  "title": "Spotlight 11 · Module 1: Speed Game",
+  "desc": "Relationships: 20 sec finish, guess the ending, missing word, 60 sec rush",
+  "file": "spotlight11-speed-game",
+  "cats": [
+   "spot",
+   "speak",
+   "vocab"
+  ],
+  "level": "B2",
+  "date": "2026-10-18",
+  "tags": [
+   "Spotlight 11"
+  ],
+  "thumb": "games/thumbs/spotlight11-speed-game.jpg"
+ },
+ {
+  "title": "Spotlight 10 · Module 1: Word Walls",
+  "desc": "Teen life, Character, Appearance: собери стену, потом тест",
+  "file": "word-walls-spotlight10",
+  "cats": [
+   "spot",
+   "vocab"
+  ],
+  "level": "B1",
+  "date": "2026-10-18",
+  "tags": [
+   "Spotlight 10"
+  ],
+  "thumb": "games/thumbs/word-walls-spotlight10.jpg"
+ },
+ {
+  "title": "Word Formation: Team Challenge",
+  "desc": "Словообразование: 4 уровня A2–C1, 100 заданий, командами с таймером",
+  "file": "word-formation",
+  "cats": [
+   "vocab",
+   "exam"
+  ],
+  "level": "B2",
+  "date": "2026-10-18",
+  "tags": [
+   "A2–C1",
+   "jeopardy"
+  ],
+  "thumb": "games/thumbs/word-formation.jpg"
+ },
+ {
+  "title": "Ten Faces, Ten Questions",
+  "desc": "10 человек задают вопросы вслух: 5 тем и ревижн Unit 1, Redo, лист для печати",
+  "file": "ten-faces",
+  "cats": [
+   "speak",
+   "listen"
+  ],
+  "level": "B1",
+  "date": "2026-10-06",
+  "tags": [
+   "интервью"
+  ],
+  "thumb": "games/thumbs/ten-faces.jpg"
+ },
+ {
+  "title": "Chat Reply: Across Generations",
+  "desc": "10 чатов, карточки с озвучкой, игра «Who is replying?»",
+  "file": "chat-reply",
+  "cats": [
+   "write"
+  ],
+  "level": "B1",
+  "date": "2026-10-06",
+  "tags": [
+   "чаты"
+  ],
+  "thumb": "games/thumbs/chat-reply.jpg"
+ },
+ {
+  "title": "Word Walls",
+  "desc": "Стены со словами: собери стену, потом тест",
+  "file": "word-walls",
+  "cats": [
+   "vocab"
+  ],
+  "level": "B1",
+  "date": "2026-10-06",
+  "tags": [
+   "стена слов"
+  ],
+  "thumb": "games/thumbs/word-walls.jpg"
+ },
+ {
+  "title": "60 Common Verbs: Sentence Builder",
+  "desc": "60 глаголов с фото: форма + время, Mixed Review, лист для печати",
+  "file": "sixty-verbs",
+  "cats": [
+   "gram"
+  ],
+  "level": "A1–A2",
+  "date": "2026-10-06",
+  "tags": [
+   "времена"
+  ],
+  "thumb": "games/thumbs/sixty-verbs.jpg"
+ },
+ {
+  "title": "Rewrite: Present Simple vs Continuous",
+  "desc": "Перепишите предложения",
+  "file": "rewrite-tenses",
+  "cats": [
+   "gram"
+  ],
+  "level": "A1–A2",
+  "date": "2026-10-06",
+  "tags": [
+   "Present tenses"
+  ],
+  "thumb": "games/thumbs/rewrite-tenses.jpg"
+ },
+ {
+  "title": "Тренажёр «Travelling»",
+  "desc": "Задания в формате ФИПИ",
+  "file": "ege-travelling",
+  "cats": [
+   "exam"
+  ],
+  "level": "B2",
+  "date": "2026-10-06",
+  "tags": [
+   "ФИПИ"
+  ],
+  "thumb": "games/thumbs/ege-travelling.jpg"
+ }
+]

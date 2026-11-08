@@ -29,6 +29,9 @@ nav{display:flex;gap:22px;margin:0 auto}
 nav button{background:none;border:0;cursor:pointer;font-weight:700;color:var(--ink);padding:6px 0;border-bottom:2px solid transparent}
 nav button.on{color:var(--teal);border-color:var(--teal)}
 .count-top{color:var(--mute);font-size:14px;white-space:nowrap}
+.adm{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;color:var(--mute)}
+.adm:hover{background:color-mix(in srgb,var(--teal) 12%,transparent);color:var(--teal)}
+.adm svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
 /* 2. category bar */
 .cats{background:color-mix(in srgb,var(--bg) 45%,var(--card));border-bottom:1px solid var(--line)}
@@ -85,6 +88,7 @@ footer{color:var(--mute);font-size:13px;text-align:center;padding:4px 0 22px}
     Cool <span>games</span></button>
   <nav><button id="navHome" class="on">Home</button><button id="navAll">Activities</button></nav>
   <span class="count-top" id="countTop"></span>
+  <a class="adm" href="admin.html" title="Управление: загрузить, изменить, удалить" aria-label="Управление"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a>
 </div></header>
 
 <div class="cats"><div class="wrap cb" id="cats"></div></div>
@@ -122,31 +126,19 @@ var C=[
 ];
 var NEWI='<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>';
 var GRIDI='<path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/>';
-/* Games: title, description, file (games/<file>.html, games/thumbs/<file>.jpg), categories, level, date added, extra tags */
-var G=[
- ["Who Dared to Be Different?","8 портретов без имён: подсказки по фото, Grammar Doctor, Who said it?, словарь и аудирование","who-dared",["speak","vocab","gram","listen"],"B1","2026-11-03",["биография","квиз"]],
- ["Funny Travel Stories: Past Simple","8 историй путешественников с аудио, карточки, бонус-раунд «Who told this story?»","funny-travel-stories",["gram","listen"],"A1–A2","2026-11-01",["Past Simple"]],
- ["Spotlight 11 · Module 1: Speed Game","Relationships: 20 sec finish, guess the ending, missing word, 60 sec rush","spotlight11-speed-game",["spot","speak","vocab"],"B2","2026-10-18",["Spotlight 11"]],
- ["Spotlight 10 · Module 1: Word Walls","Teen life, Character, Appearance: собери стену, потом тест","word-walls-spotlight10",["spot","vocab"],"B1","2026-10-18",["Spotlight 10"]],
- ["Word Formation: Team Challenge","Словообразование: 4 уровня A2–C1, 100 заданий, командами с таймером","word-formation",["vocab","exam"],"B2","2026-10-18",["A2–C1","jeopardy"]],
- ["Ten Faces, Ten Questions","10 человек задают вопросы вслух: 5 тем и ревижн Unit 1, Redo, лист для печати","ten-faces",["speak","listen"],"B1","2026-10-06",["интервью"]],
- ["Chat Reply: Across Generations","10 чатов, карточки с озвучкой, игра «Who is replying?»","chat-reply",["write"],"B1","2026-10-06",["чаты"]],
- ["Word Walls","Стены со словами: собери стену, потом тест","word-walls",["vocab"],"B1","2026-10-06",["стена слов"]],
- ["60 Common Verbs: Sentence Builder","60 глаголов с фото: форма + время, Mixed Review, лист для печати","sixty-verbs",["gram"],"A1–A2","2026-10-06",["времена"]],
- ["Rewrite: Present Simple vs Continuous","Перепишите предложения","rewrite-tenses",["gram"],"A1–A2","2026-10-06",["Present tenses"]],
- ["Тренажёр «Travelling»","Задания в формате ФИПИ","ege-travelling",["exam"],"B2","2026-10-06",["ФИПИ"]]
-];
+/* Games are listed in games.json (edited from the "Управление" page). */
+var G=[];
 var CAT={};C.forEach(function(c){CAT[c[0]]=c});
-var NEWEST=G.map(function(g){return g[5]}).sort().slice(-1)[0];
+var NEWEST="";
 var $=function(id){return document.getElementById(id)};
 function esc(s){return s.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function ico(p){return '<svg viewBox="0 0 24 24">'+p+'</svg>'}
 var st;
 function card(g){
-  return '<a class="g" href="games/'+g[2]+'.html"><div class="pic"><img src="games/thumbs/'+g[2]+'.jpg" alt="" loading="lazy">'+
+  return '<a class="g" href="games/'+g[2]+'.html"><div class="pic">'+(g[7]?'<img src="'+g[7]+'" alt="" loading="lazy">':'')+
    (g[5]===NEWEST?'<span class="new">NEW</span>':'')+'<span class="lvl">'+g[4]+'</span></div>'+
    '<div class="body"><div class="t">'+esc(g[0])+'</div><div class="d">'+esc(g[1])+'</div><div class="tags">'+
-   g[3].map(function(k){return '<span style="--c:var('+CAT[k][2]+')">'+CAT[k][1]+'</span>'}).join("")+
+   g[3].filter(function(k){return CAT[k]}).map(function(k){return '<span style="--c:var('+CAT[k][2]+')">'+CAT[k][1]+'</span>'}).join("")+
    g[6].map(function(t){return '<span style="--c:var(--mute)">'+esc(t)+'</span>'}).join("")+'</div></div></a>';}
 function section(icon,color,title,sub,list){
   return '<section class="sec"><div class="sh"><span class="ic" style="--c:'+color+'">'+ico(icon)+'</span><h2>'+esc(title)+'</h2><small>'+esc(sub)+'</small></div><div class="grid">'+list.map(card).join("")+'</div></section>';}
@@ -157,7 +149,7 @@ function draw(){
   $("fCat").value=st.cat;$("fLvl").value=st.lvl;$("fSort").value=st.sort;
   var list=G.filter(function(g){
     return (!st.cat||g[3].indexOf(st.cat)>-1)&&(!st.lvl||g[4]===st.lvl)&&
-      (!st.q||(g[0]+" "+g[1]+" "+g[4]+" "+g[6].join(" ")+" "+g[3].map(function(k){return CAT[k][1]}).join(" ")).toLowerCase().indexOf(st.q)>-1)});
+      (!st.q||(g[0]+" "+g[1]+" "+g[4]+" "+g[6].join(" ")+" "+g[3].map(function(k){return CAT[k]?CAT[k][1]:""}).join(" ")).toLowerCase().indexOf(st.q)>-1)});
   list.sort(st.sort==="az"?function(a,b){return a[0].localeCompare(b[0])}:st.sort==="old"?function(a,b){return a[5]<b[5]?-1:a[5]>b[5]?1:0}:function(a,b){return a[5]<b[5]?1:a[5]>b[5]?-1:0});
   $("shown").textContent=list.length;
   var h="";
@@ -171,8 +163,9 @@ function draw(){
   $("view").innerHTML=h;$("no").style.display=list.length?"none":"block";
 }
 $("fCat").innerHTML='<option value="">All Categories</option>'+C.map(function(c){return '<option value="'+c[0]+'">'+c[1]+'</option>'}).join("");
-$("countTop").textContent=G.length+" activities";
-$("heroSub").textContent=G.length+" интерактивных игр и тренажёров по английскому";
+function counts(){
+  $("countTop").textContent=G.length+" activities";
+  $("heroSub").textContent=G.length+" интерактивных игр и тренажёров по английскому";}
 $("fCat").onchange=function(){st.cat=this.value;st.all=true;draw()};
 $("fLvl").onchange=function(){st.lvl=this.value;st.all=true;draw()};
 $("fSort").onchange=function(){st.sort=this.value;st.all=true;draw()};
@@ -182,8 +175,12 @@ $("navHome").onclick=$("logo").onclick=$("reset").onclick=fresh;
 /* Always open at the very top with nothing selected. */
 if("scrollRestoration" in history)history.scrollRestoration="manual";
 function fresh(){st={cat:"",lvl:"",sort:"new",q:"",all:false};$("q").value="";draw();window.scrollTo(0,0)}
-window.addEventListener("pageshow",fresh);
-fresh();
+window.addEventListener("pageshow",function(){if(st)fresh()});
+fetch("games.json?v="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(list){
+  G=list.map(function(g){return [g.title||"",g.desc||"",g.file,g.cats||[],g.level||"",g.date||"",g.tags||[],g.thumb||""]});
+  NEWEST=G.map(function(g){return g[5]}).sort().slice(-1)[0]||"";
+  counts();fresh();
+}).catch(function(){counts();fresh();$("no").textContent="Не удалось загрузить список игр. Обновите страницу.";$("no").style.display="block"});
 </script>
 </body>
 </html>
