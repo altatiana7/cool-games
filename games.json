@@ -1,5 +1,21 @@
 [
  {
+  "title": "Shopping Secrets: Memory Challenge",
+  "desc": "4 истории о покупках: прочитай за 25–45 сек, ответь на 32 вопроса по памяти",
+  "file": "shopping-secrets",
+  "cats": [
+   "vocab",
+   "speak"
+  ],
+  "level": "A1",
+  "date": "2026-11-08",
+  "tags": [
+   "Shopping",
+   "одежда"
+  ],
+  "thumb": "games/thumbs/shopping-secrets.jpg"
+ },
+ {
   "title": "Who Dared to Be Different?",
   "desc": "8 портретов без имён: подсказки по фото, Grammar Doctor, Who said it?, словарь и аудирование",
   "file": "who-dared",
@@ -16,6 +32,21 @@
    "квиз"
   ],
   "thumb": "games/thumbs/who-dared.jpg"
+ },
+ {
+  "title": "Funny Travel Stories: Past Simple",
+  "desc": "8 историй путешественников с аудио, карточки, бонус-раунд «Who told this story?»",
+  "file": "funny-travel-stories",
+  "cats": [
+   "gram",
+   "listen"
+  ],
+  "level": "A1–A2",
+  "date": "2026-11-01",
+  "tags": [
+   "Past Simple"
+  ],
+  "thumb": "games/thumbs/funny-travel-stories.jpg"
  },
  {
   "title": "Spotlight 11 · Module 1: Speed Game",
